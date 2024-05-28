@@ -3,4 +3,4 @@ SAE_2.01
 
 - HEUERTZ Zacharie
 - KNORST Valentin
-- DEFOLI Julien
+- DEFOLIE Julien

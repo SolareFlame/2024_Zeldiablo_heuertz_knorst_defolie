@@ -18,11 +18,6 @@ public class Clavier {
 
         switch (event.getCode()) {
 
-            // si touche bas
-            case S:
-                this.bas = true;
-                break;
-
             // si touche haut
             case Z:
                 this.haut = true;
@@ -31,6 +26,11 @@ public class Clavier {
             // si touche gauche
             case Q:
                 this.gauche = true;
+                break;
+
+            // si touche bas
+            case S:
+                this.bas = true;
                 break;
 
             // si touche droite

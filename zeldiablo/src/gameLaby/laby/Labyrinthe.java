@@ -1,5 +1,7 @@
 package gameLaby.laby;
 
+import moteurJeu.MoteurJeu;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -195,4 +197,5 @@ public class Labyrinthe {
         // utilise le tableau de boolean
         return this.murs[x][y];
     }
+
 }

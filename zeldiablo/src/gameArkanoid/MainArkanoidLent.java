@@ -11,7 +11,7 @@ public class MainArkanoidLent {
     public static void main(String[] args) {
         int width = 800;
         int height = 600;
-        int pFPS = 20;
+        int pFPS = 145;
 
         // creation des objets
         ArkanoidJeu jeuArk = new ArkanoidJeu();

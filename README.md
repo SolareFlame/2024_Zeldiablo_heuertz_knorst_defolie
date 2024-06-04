@@ -4,6 +4,7 @@ SAE_2.01
 - HEUERTZ Zacharie
 - KNORST Valentin
 - DEFOLIE Julien
+- VIRY Nathan
 
 email prof : florian.delconte@loria.fr
 

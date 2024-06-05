@@ -29,7 +29,7 @@ public class LabyDessin implements DessinJeu {
         /*
         -------------------- VARIABLES --------------------
          */
-        final String PATH = "zeldiablo/textures/";
+        final String PATH = "zeldiablo/ressources/textures/";
 
         final String GAUCHE = PATH + "pj/pj_left_large.png";
         final String DROITE = PATH + "pj/pj_right_large.png";
@@ -190,4 +190,8 @@ public class LabyDessin implements DessinJeu {
         Image img = new Image(abs_path);
         gc.drawImage(img,x * TAILLE + TAILLE/2 - imgsize/2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
     }
+
+
+
+
 }

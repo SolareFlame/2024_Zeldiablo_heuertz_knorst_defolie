@@ -5,6 +5,8 @@ package gameLaby.laby;
  */
 public class Monstre extends Entite {
 
+    private int pv = 3;
+
     /**
      * Constructeur du monstre
      *
@@ -15,4 +17,11 @@ public class Monstre extends Entite {
         super(dx, dy);
     }
 
+    public int getPv() {
+        return pv;
+    }
+
+    public void subirDegat() {
+        pv--;
+    }
 }

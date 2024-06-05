@@ -69,7 +69,7 @@ public class Labyrinthe {
         for(Monstre monstre : monstres) {
             if (posX == monstre.x) {
                 if (posY == monstre.y)
-                    return MONSTRE; // DOIT ATTAQUER LE MONSTRE
+                    return MONSTRE;
             }
         }
 
@@ -92,7 +92,16 @@ public class Labyrinthe {
                 break;
 
             case MONSTRE:
-                pj.attaquer(direction);
+                int[] suivante = getSuivant(pj.x, pj.y, direction);
+                for (Monstre monstre : monstres) {
+                    if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
+                        pj.attaquer(monstre);
+                        if (monstre.getPv() == 0) {
+                            monstres.remove(monstre);
+                        }
+                        break;
+                    }
+                }
                 break;
 
             default:
@@ -219,9 +228,35 @@ public class Labyrinthe {
 
         direction = action;
 
-
         deplacerMonstre();
     }
+
+    public void dashDe2Cases() {
+        int[] suivante = getSuivant(pj.x, pj.y, direction);
+        int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
+
+        if (!this.murs[suivante[0]][suivante[1]]) {
+            for (Monstre monstre : monstres) {
+                if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
+                    return;
+                }
+            }
+            pj.x = suivante[0];
+            pj.y = suivante[1];
+
+            if (!this.murs[suivante2[0]][suivante2[1]]) {
+                for (Monstre monstre : monstres) {
+                    if (monstre.x == suivante2[0] && monstre.y == suivante2[1]) {
+                        return;
+                    }
+                }
+                pj.x = suivante2[0];
+                pj.y = suivante2[1];
+            }
+        }
+    }
+
+
 
     /**
      * deplace le monstre en fonction de l'action.

@@ -14,6 +14,7 @@ public class LabyJeu implements Jeu {
     private boolean basAppuye = false;
     private boolean gaucheAppuye = false;
     private boolean droiteAppuye = false;
+    private boolean dashAppuye = false;
 
 
     /**
@@ -33,6 +34,10 @@ public class LabyJeu implements Jeu {
      */
     @Override
     public void update(double deltaTime, Clavier clavier) {
+        if(clavier.dash && !dashAppuye) {
+            labyrinthe.dashDe2Cases();
+            dashAppuye = true;
+        }
         if (clavier.haut && !hautAppuye) {
             labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.HAUT), Labyrinthe.HAUT);
             hautAppuye = true;
@@ -60,6 +65,9 @@ public class LabyJeu implements Jeu {
         }
         if(!clavier.bas){
             basAppuye = false;
+        }
+        if(!clavier.dash){
+            dashAppuye = false;
         }
     }
 

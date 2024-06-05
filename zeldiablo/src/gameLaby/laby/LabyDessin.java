@@ -80,19 +80,6 @@ public class LabyDessin implements DessinJeu {
         }
 
 
-        /*
-        -------------------- MONSTRES --------------------
-         */
-
-        if (labyrinthe.getLabyrinthe().monstres != null) {
-            for (Monstre monstre : laby.monstres) {
-                double monstrex = monstre.getX();
-                double monstrey = monstre.getY();
-                gc.setFill(Color.rgb(127, 0, 255));
-                gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-            }
-        }
-
 
 
 
@@ -118,6 +105,21 @@ public class LabyDessin implements DessinJeu {
 
 
 
+
+
+
+
+
+
+        // monstre
+        if (labyrinthe.getLabyrinthe().monstres != null) {
+            for (Monstre monstre : laby.monstres) {
+                double monstrex = monstre.getX();
+                double monstrey = monstre.getY();
+                gc.setFill(Color.rgb(127, 0, 255));
+                gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
+            }
+        }
 
 
 

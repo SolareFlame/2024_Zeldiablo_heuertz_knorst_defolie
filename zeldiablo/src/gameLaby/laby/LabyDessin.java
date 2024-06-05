@@ -17,17 +17,6 @@ public class LabyDessin implements DessinJeu {
 
     public static final int TAILLE = 50;
 
-    public static final String PATH = "zeldiablo/textures/";
-
-    public static final String GAUCHE = PATH + "pj_left_large.png";
-    public static final String DROITE = PATH + "pj_right_large.png";
-    public static final String HAUT = PATH + "pj_up_large.png";
-    public static final String DOWN = PATH + "pj_down_large.png";
-
-
-
-
-
 
     /**
      *
@@ -36,28 +25,54 @@ public class LabyDessin implements DessinJeu {
      */
     @Override
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
+
+        /*
+        -------------------- VARIABLES --------------------
+         */
+        final String PATH = "zeldiablo/textures/";
+
+        final String GAUCHE = PATH + "pj/pj_left_large.png";
+        final String DROITE = PATH + "pj/pj_right_large.png";
+        final String HAUT = PATH + "pj/pj_up_large.png";
+        final String DOWN = PATH + "pj/pj_down_large.png";
+
+        final String MONSTRE_GAUCHE = PATH + "monster/monstre_left_large.png";
+        final String MONSTRE_DROITE = PATH + "monster/monstre_right_large.png";
+        final String MONSTRE_HAUT = PATH + "monster/monstre_up_large.png";
+        final String MONSTRE_DOWN = PATH + "monster/monstre_down_large.png";
+
+        final String WALL = PATH + "wall/wall_rock_midlarge.png";
+
+        /*
+        -------------------- SETUP --------------------
+         */
+
         LabyJeu labyrinthe = (LabyJeu) jeu;
 
         final GraphicsContext gc = canvas.getGraphicsContext2D();
+        Labyrinthe laby = labyrinthe.getLabyrinthe();
 
         /*
         -------------------- SOL --------------------
          */
-        gc.setFill(Color.DARKGREEN);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.setFill(Color.GREEN);
+        gc.fillRect(0, 0, laby.getLength()*TAILLE, laby.getLengthY()*TAILLE);
 
         /*
         -------------------- MURS --------------------
          */
 
-        Labyrinthe laby = labyrinthe.getLabyrinthe();
+
+        File imgf_wall = new File(WALL);
+        String abs_wall = imgf_wall .getAbsolutePath();
+        Image img_wall = new Image(abs_wall );
 
         //MUR FACE
-        gc.setFill(Color.GRAY);
+
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
-                    gc.fillRect(j * TAILLE, i * TAILLE, TAILLE, TAILLE);
+                    gc.drawImage(img_wall ,j * TAILLE, i * TAILLE, TAILLE, TAILLE);
                 }
             }
         }
@@ -89,7 +104,7 @@ public class LabyDessin implements DessinJeu {
 
 
         try {
-            chargerImage(gc, pj_x, pj_y, direction);
+            chargerEntite(gc, pj_x, pj_y, direction);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -102,10 +117,34 @@ public class LabyDessin implements DessinJeu {
          */
         if (labyrinthe.getLabyrinthe().monstres != null) {
             for (Monstre monstre : laby.monstres) {
-                double monstrex = monstre.getX();
-                double monstrey = monstre.getY();
-                gc.setFill(Color.rgb(127, 0, 255));
-                gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
+                double monstre_x = monstre.getX();
+                double monstre_y = monstre.getY();
+
+                String direction_monstre = "gauche"; //temp
+                switch (direction_monstre) {
+                    case "haut":
+                        direction_monstre = MONSTRE_HAUT;
+                        break;
+                    case "bas":
+                        direction_monstre = MONSTRE_DOWN;
+                        break;
+                    case "gauche":
+                        direction_monstre = MONSTRE_GAUCHE;
+                        break;
+                    case "droite":
+                        direction_monstre = MONSTRE_DROITE;
+                        break;
+                }
+
+
+
+                try {
+                    chargerEntite(gc, monstre_x, monstre_y, direction_monstre);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+
             }
         }
 
@@ -118,7 +157,7 @@ public class LabyDessin implements DessinJeu {
         /*
         -------------------- TOP --------------------
          */
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
@@ -133,20 +172,9 @@ public class LabyDessin implements DessinJeu {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    public void chargerImage(GraphicsContext gc, double x, double y, String path) throws Exception {
+    public void chargerEntite(GraphicsContext gc, double x, double y, String path) throws Exception {
         double imgsize = 1.7 * TAILLE;
 
         File imageFile = new File(path);
@@ -161,8 +189,5 @@ public class LabyDessin implements DessinJeu {
         //image
         Image img = new Image(abs_path);
         gc.drawImage(img,x * TAILLE + TAILLE/2 - imgsize/2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
-
-
-
     }
 }

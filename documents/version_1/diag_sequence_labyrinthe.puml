@@ -1,0 +1,17 @@
+@startuml
+participant "Labyrinthe"
+participant "pj:Perso" as pj
+[-> Labyrinthe : deplacerPerso(String action)
+activate Labyrinthe
+Labyrinthe -> pj : int[] courante = {this.pj.x, this.pj.y}
+activate pj
+Labyrinthe <-- pj
+Labyrinthe -> Labyrinthe : int[] suivante = getSuivant(courante[0], courante[1], action)
+Labyrinthe -> pj : this.pj.x = suivante[0]
+Labyrinthe <-- pj
+Labyrinthe -> pj : this.pj.y = suivante[1]
+Labyrinthe <-- pj
+deactivate pj
+[<-- Labyrinthe
+deactivate Labyrinthe
+@enduml

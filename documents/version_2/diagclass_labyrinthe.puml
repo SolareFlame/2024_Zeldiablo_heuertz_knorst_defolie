@@ -1,0 +1,82 @@
+@startuml
+
+package moteurJeu {
+
+interface Jeu{
++ init()
++ update(seconds: double, clavier: Clavier)
++ etreFini(): boolean
+}
+
+
+interface DessinJeu {
++ dessinerJeu(jeu: Jeu, canvas: Canvas)
+}
+}
+
+package gameLaby{
+
+class LabyJeu{
++ init()
++ LabyJeu()
++ update(seconds: double, clavier: Clavier)
++ etreFini(): boolean
+}
+
+Jeu <|.. LabyJeu
+
+class Labyrinthe{
++ pj: Perso
++ monstre: Monstre
++ murs[][]: boolean
+- random: Random
++ getSuivant(x: int, y: int, action: String): int[]
++ Labyrinthe(nom: String)
++ deplacerPerso(action: String)
++ deplacerMonstre(action: String)
++ etreFinie(): boolean
++ getLength(): int
++ getLengthY(): int
++ getMurs(): boolean[][]
+}
+
+LabyJeu "1" --> "1" Labyrinthe : -labyrinthe
+
+class Perso{
+- x,y: int
++ Perso(dx: int, dy: int)
++ etrePresent(dx: int, dy: int): boolean
++ getX(): int
++ getY(): int
++ attaquer()
+}
+
+class Monstre{
+Monstre
+}
+
+abstract class Entite{
+# x,y: int
++ Entite(dx: int, dy: int)
++ etrePresent(dx: int, dy: int): boolean
++ getX(): int
++ getY(): int
+}
+
+Entite <|-- Perso
+Entite <|-- Monstre
+
+
+LabyJeu "1" --> "1" Perso : -perso
+
+
+class LabyDessin{
++ dessinerJeu(jeu: Jeu, canvas: Canvas)
+}
+
+DessinJeu <|.. LabyDessin
+LabyJeu <. LabyDessin:uses
+}
+
+@enduml
+

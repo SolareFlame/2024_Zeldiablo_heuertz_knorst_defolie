@@ -69,7 +69,7 @@ public class Labyrinthe {
         for(Monstre monstre : monstres) {
             if (posX == monstre.x) {
                 if (posY == monstre.y)
-                    return MONSTRE; // DOIT ATTAQUER LE MONSTRE
+                    return MONSTRE;
             }
         }
 
@@ -92,7 +92,16 @@ public class Labyrinthe {
                 break;
 
             case MONSTRE:
-                pj.attaquer(direction);
+                int[] suivante = getSuivant(pj.x, pj.y, direction);
+                for (Monstre monstre : monstres) {
+                    if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
+                        pj.attaquer(monstre);
+                        if (monstre.getPv() == 0) {
+                            monstres.remove(monstre);
+                        }
+                        break;
+                    }
+                }
                 break;
 
             default:
@@ -218,7 +227,6 @@ public class Labyrinthe {
         this.pj.y = suivante[1];
 
         direction = action;
-
 
         deplacerMonstre();
     }

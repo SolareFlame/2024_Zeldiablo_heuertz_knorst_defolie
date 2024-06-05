@@ -1,6 +1,8 @@
 package gameLaby.laby;
 
 
+import static gameLaby.laby.Labyrinthe.direction;
+
 /**
  * gere un personnage situe en x,y
  */
@@ -54,7 +56,7 @@ public class Perso {
         return this.y;
     }
 
-    public void attaquer(String direction) {
-        // TODO
+    public void attaquer(Monstre monstre) {
+        monstre.subirDegat();
     }
 }

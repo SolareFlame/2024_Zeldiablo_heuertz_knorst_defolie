@@ -30,7 +30,6 @@ Labyrinthe {
     public static final String BAS = "bas";
     public static final String GAUCHE = "gauche";
     public static final String DROITE = "droite";
-    public String direction = GAUCHE;
 
     // Ajoutez les constantes pour les directions possibles
     public static final String[] ACTIONS = {HAUT, BAS, GAUCHE, DROITE};
@@ -93,7 +92,6 @@ Labyrinthe {
                 break;
 
             case MONSTRE:
-                pj.attaquer(direction);
                 break;
 
             default:
@@ -218,10 +216,8 @@ Labyrinthe {
         this.pj.x = suivante[0];
         this.pj.y = suivante[1];
 
-        direction = action;
-
-
-        deplacerMonstre();
+        String actions = ACTIONS[random.nextInt(ACTIONS.length)];
+        deplacerMonstre(actions);
     }
 
     /**
@@ -230,18 +226,12 @@ Labyrinthe {
      *
      * @param action une des actions possibles
      */
-    public void deplacerMonstre() {
+    public void deplacerMonstre(String action) {
 
         for (Monstre monstre : monstres) {
-            String action = ACTIONS[random.nextInt(ACTIONS.length)];
             int[] suivante = getSuivant(monstre.x, monstre.y, action);
 
             if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-                for (Monstre monstre2 : monstres) {
-                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                        return;
-                    }
-                }
                 monstre.x = suivante[0];
                 monstre.y = suivante[1];
             }

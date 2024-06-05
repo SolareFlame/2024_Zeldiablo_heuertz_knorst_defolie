@@ -231,6 +231,33 @@ public class Labyrinthe {
         deplacerMonstre();
     }
 
+    public void dashDe2Cases() {
+        int[] suivante = getSuivant(pj.x, pj.y, direction);
+        int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
+
+        if (!this.murs[suivante[0]][suivante[1]]) {
+            for (Monstre monstre : monstres) {
+                if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
+                    return;
+                }
+            }
+            pj.x = suivante[0];
+            pj.y = suivante[1];
+
+            if (!this.murs[suivante2[0]][suivante2[1]]) {
+                for (Monstre monstre : monstres) {
+                    if (monstre.x == suivante2[0] && monstre.y == suivante2[1]) {
+                        return;
+                    }
+                }
+                pj.x = suivante2[0];
+                pj.y = suivante2[1];
+            }
+        }
+    }
+
+
+
     /**
      * deplace le monstre en fonction de l'action.
      * gere la collision avec les murs et le personnage

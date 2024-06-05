@@ -52,7 +52,7 @@ class Perso{
 }
 
 class Monstre{
-Monstre
+Monstre(dx: int, dy: int)
 }
 
 abstract class Entite{

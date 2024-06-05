@@ -227,8 +227,6 @@ Labyrinthe {
     /**
      * deplace le monstre en fonction de l'action.
      * gere la collision avec les murs et le personnage
-     *
-     * @param action une des actions possibles
      */
     public void deplacerMonstre() {
 

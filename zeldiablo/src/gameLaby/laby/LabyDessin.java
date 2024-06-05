@@ -19,10 +19,10 @@ public class LabyDessin implements DessinJeu {
 
     public static final String PATH = "zeldiablo/textures/";
 
-    public static final String GAUCHE = PATH + "pj_left.png";
-    public static final String DROITE = PATH + "pj_right.png";
-    public static final String HAUT = PATH + "pj_up.png";
-    public static final String DOWN = PATH + "pj_down.png";
+    public static final String GAUCHE = PATH + "pj_left_large.png";
+    public static final String DROITE = PATH + "pj_right_large.png";
+    public static final String HAUT = PATH + "pj_up_large.png";
+    public static final String DOWN = PATH + "pj_down_large.png";
 
 
 
@@ -147,10 +147,22 @@ public class LabyDessin implements DessinJeu {
     }
 
     public void chargerImage(GraphicsContext gc, double x, double y, String path) throws Exception {
+        double imgsize = 1.7 * TAILLE;
+
         File imageFile = new File(path);
         String abs_path = imageFile.getAbsolutePath();
 
+        //carré (vide) de collision (coutour rouge)
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1);
+        gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+
+
+        //image
         Image img = new Image(abs_path);
-        gc.drawImage(img, x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+        gc.drawImage(img,x * TAILLE + TAILLE/2 - imgsize/2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+
+
+
     }
 }

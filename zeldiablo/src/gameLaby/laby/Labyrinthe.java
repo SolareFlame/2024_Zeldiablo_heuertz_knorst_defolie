@@ -12,8 +12,7 @@ import java.util.Random;
  * <ul> un personnage (x,y) </ul>
  * <ul> un monstre (x,y) </ul>
  */
-public class
-Labyrinthe {
+public class Labyrinthe {
 
     /**
      * Constantes char
@@ -30,7 +29,7 @@ Labyrinthe {
     public static final String BAS = "bas";
     public static final String GAUCHE = "gauche";
     public static final String DROITE = "droite";
-    public String direction = GAUCHE;
+    public static String direction = GAUCHE;
 
     // Ajoutez les constantes pour les directions possibles
     public static final String[] ACTIONS = {HAUT, BAS, GAUCHE, DROITE};

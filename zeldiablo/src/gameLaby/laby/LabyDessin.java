@@ -70,7 +70,22 @@ public class LabyDessin implements DessinJeu {
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
-        String direction = GAUCHE; //temp
+        String direction = Labyrinthe.direction;
+        switch (direction) {
+            case "haut":
+                direction = HAUT;
+                break;
+            case "bas":
+                direction = DOWN;
+                break;
+            case "gauche":
+                direction = GAUCHE;
+                break;
+            case "droite":
+                direction = DROITE;
+                break;
+        }
+
 
 
         try {
@@ -79,6 +94,20 @@ public class LabyDessin implements DessinJeu {
             throw new RuntimeException(e);
         }
 
+
+
+
+        /*
+        -------------------- MONSTRES --------------------
+         */
+        if (labyrinthe.getLabyrinthe().monstres != null) {
+            for (Monstre monstre : laby.monstres) {
+                double monstrex = monstre.getX();
+                double monstrey = monstre.getY();
+                gc.setFill(Color.rgb(127, 0, 255));
+                gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
+            }
+        }
 
 
 
@@ -109,17 +138,6 @@ public class LabyDessin implements DessinJeu {
 
 
 
-
-
-        // monstre
-        if (labyrinthe.getLabyrinthe().monstres != null) {
-            for (Monstre monstre : laby.monstres) {
-                double monstrex = monstre.getX();
-                double monstrey = monstre.getY();
-                gc.setFill(Color.rgb(127, 0, 255));
-                gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-            }
-        }
 
 
 

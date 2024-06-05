@@ -10,11 +10,6 @@ import java.io.IOException;
  */
 public class LabyJeu implements Jeu {
     private final Labyrinthe labyrinthe;
-    private boolean hautAppuye = false;
-    private boolean basAppuye = false;
-    private boolean gaucheAppuye = false;
-    private boolean droiteAppuye = false;
-
 
     /**
      * Constructeur de la classe LabyJeu.
@@ -26,40 +21,19 @@ public class LabyJeu implements Jeu {
         this.labyrinthe = new Labyrinthe(nom);
     }
 
-    /**
-     * Methode qui permet de mettre a jour le jeu
-     * @param deltaTime temps ecoule depuis la derniere mise a jour
-     * @param clavier objet contenant l'état du clavier'
-     */
     @Override
     public void update(double deltaTime, Clavier clavier) {
-        if (clavier.haut && !hautAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.HAUT), Labyrinthe.HAUT);
-            hautAppuye = true;
+        if (clavier.haut) {
+            this.labyrinthe.deplacerPerso(Labyrinthe.HAUT);
         }
-        if (clavier.bas && !basAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.BAS), Labyrinthe.BAS);
-            basAppuye = true;
+        if (clavier.bas) {
+            this.labyrinthe.deplacerPerso(Labyrinthe.BAS);
         }
-        if (clavier.gauche && !gaucheAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.GAUCHE), Labyrinthe.GAUCHE);
-            gaucheAppuye = true;
+        if (clavier.gauche) {
+            this.labyrinthe.deplacerPerso(Labyrinthe.GAUCHE);
         }
-        if (clavier.droite && !droiteAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.DROITE), Labyrinthe.DROITE);
-            droiteAppuye = true;
-        }
-        if (!clavier.droite) {
-            droiteAppuye = false;
-        }
-        if(!clavier.gauche){
-            gaucheAppuye = false;
-        }
-        if(!clavier.haut){
-            hautAppuye = false;
-        }
-        if(!clavier.bas){
-            basAppuye = false;
+        if (clavier.droite) {
+            this.labyrinthe.deplacerPerso(Labyrinthe.DROITE);
         }
     }
 

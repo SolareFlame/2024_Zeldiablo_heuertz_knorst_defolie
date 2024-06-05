@@ -3,6 +3,7 @@ package gameLaby.laby;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -25,10 +26,10 @@ Labyrinthe {
     /**
      * constantes actions possibles
      */
-    public static final String HAUT = "Haut";
-    public static final String BAS = "Bas";
-    public static final String GAUCHE = "Gauche";
-    public static final String DROITE = "Droite";
+    public static final String HAUT = "haut";
+    public static final String BAS = "bas";
+    public static final String GAUCHE = "gauche";
+    public static final String DROITE = "droite";
 
     // Ajoutez les constantes pour les directions possibles
     public static final String[] ACTIONS = {HAUT, BAS, GAUCHE, DROITE};
@@ -37,7 +38,7 @@ Labyrinthe {
      * attributs du personnage et du monstre
      */
     public Perso pj;
-    public Monstre monstre;
+    public ArrayList<Monstre> monstres = new ArrayList<>();
 
     /**
      * les murs du labyrinthe
@@ -45,6 +46,59 @@ Labyrinthe {
     public boolean[][] murs;
 
     private Random random;
+
+    public char estDevant(String direction) {
+        int posX = pj.x;
+        int posY = pj.y;
+        switch (direction) {
+            case HAUT:
+                posY --;
+                break;
+            case BAS:
+                posY++;
+                break;
+            case DROITE:
+                posX++;
+                break;
+            case GAUCHE:
+                posX--;
+                break;
+            default:
+                throw new Error("action inconnue");
+        }
+        for(Monstre monstre : monstres) {
+            if (posX == monstre.x) {
+                if (posY == monstre.y)
+                    return MONSTRE; // DOIT ATTAQUER LE MONSTRE
+            }
+        }
+
+        if (getMur(posX, posY))
+            return MUR;
+        else
+            return VIDE;
+
+        /**int[] res = {x, y};
+         return res;**/
+    }
+
+    public void traitement(char caseDevant, String direction) {
+        switch (caseDevant) {
+            case MUR:
+                break;
+
+            case VIDE:
+                deplacerPerso(direction);
+                break;
+
+            case MONSTRE:
+                pj.attaquer(direction);
+                break;
+
+            default:
+                throw new Error("case inconnue");
+        }
+    }
 
     /**
      * retourne la case suivante selon une actions
@@ -100,7 +154,6 @@ Labyrinthe {
         // creation labyrinthe vide
         this.murs = new boolean[nbColonnes][nbLignes];
         this.pj = null;
-        this.monstre = null;
         this.random = new Random();
 
         // lecture des cases
@@ -132,7 +185,7 @@ Labyrinthe {
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Monstre
-                        this.monstre = new Monstre(colonne, numeroLigne);
+                        this.monstres.add(new Monstre(colonne, numeroLigne));
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);
@@ -156,18 +209,14 @@ Labyrinthe {
      * @param action une des actions possibles
      */
     public void deplacerPerso(String action) {
-        // case courante
-        int[] courante = {this.pj.x, this.pj.y};
 
         // calcule case suivante
-        int[] suivante = getSuivant(courante[0], courante[1], action);
+        int[] suivante = getSuivant(pj.x, pj.y, action);
 
-        // si c'est pas un mur et pas le monstre, on effectue le deplacement
-        if (!this.murs[suivante[0]][suivante[1]] && (this.monstre.x != suivante[0] || this.monstre.y != suivante[1])) {
-            // on met a jour personnage
-            this.pj.x = suivante[0];
-            this.pj.y = suivante[1];
-        }
+        // on met a jour personnage
+        this.pj.x = suivante[0];
+        this.pj.y = suivante[1];
+
         String actions = ACTIONS[random.nextInt(ACTIONS.length)];
         deplacerMonstre(actions);
     }
@@ -180,23 +229,23 @@ Labyrinthe {
      */
     public void deplacerMonstre(String action) {
 
-        int[] courante = {this.monstre.x, this.monstre.y};
+        for (Monstre monstre : monstres) {
+            int[] suivante = getSuivant(monstre.x, monstre.y, action);
 
-        int[] suivante = getSuivant(courante[0], courante[1], action);
-
-
-        if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-            this.monstre.x = suivante[0];
-            this.monstre.y = suivante[1];
+            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
+                monstre.x = suivante[0];
+                monstre.y = suivante[1];
+            }
         }
     }
 
+
     /**
-     * jamais fini
      *
      * @return fin du jeu
      */
     public boolean etreFini() {
+        // TODO
         return false;
     }
 

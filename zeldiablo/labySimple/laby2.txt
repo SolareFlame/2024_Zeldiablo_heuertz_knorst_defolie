@@ -1,11 +1,12 @@
-14
+15
 20
 XXXXXXXXXXXXXXXXXXXX
-XX..M....X........XX
+XXXXXXXXXXXXXXXXXXXX
+XX.......X........XX
 X........X.........X
 X........X...X.....X
 X..X.....X........XX
-X......XXX.........X
+X......XXX.....M...X
 X...X....X.........X
 X..X..........X....X
 X.....X..X.........X

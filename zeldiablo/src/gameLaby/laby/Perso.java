@@ -53,4 +53,8 @@ public class Perso {
         //getter
         return this.y;
     }
+
+    public void attaquer(String direction) {
+        // TODO
+    }
 }

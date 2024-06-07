@@ -114,7 +114,7 @@ public class MoteurJeu extends Application {
         final BorderPane root = new BorderPane();
         root.setBottom(stats);
         VBox vb = new VBox();
-        Text t = new Text("Labyrinthe");
+        Text t = new Text("OTTER GAME");
         t.setFont(Font.font("verdana",  FontWeight.BOLD, FontPosture.REGULAR, 60));
         Button bplay = new Button("Play");
         bplay.setMinHeight(40);
@@ -129,7 +129,7 @@ public class MoteurJeu extends Application {
 
 
 
-        ///**
+        /**
 
         // TODO Auto-generated method stub
         //Initialising path of the media file, replace this with your file path
@@ -148,7 +148,7 @@ public class MoteurJeu extends Application {
         root.getChildren().add(mediaView);
         mediaPlayer.play();
 
-        //**/
+        **/
 
         // creation de la scene
         final Scene scene = new Scene(root, WIDTH, HEIGHT);

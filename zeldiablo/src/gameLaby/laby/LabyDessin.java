@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Classe LabyDessin
  */
@@ -26,7 +25,7 @@ public class LabyDessin implements DessinJeu {
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
         final String PATH = "zeldiablo/ressources/textures/";
 
-        final String WALL = PATH + "wall/wall_rock_midlarge.png";
+        final String WALL = PATH + "wall/wall_rock_grass_midlarge.png";
 
         final String PJ = PATH + "pj/";
         final String MONSTRE = PATH + "monstre/";
@@ -35,9 +34,19 @@ public class LabyDessin implements DessinJeu {
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         Labyrinthe laby = labyrinthe.getLabyrinthe();
 
+         /*
+        -------- SOL --------
+        */
         gc.setFill(Color.GREEN);
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
+
+
+
+
+        /*
+        -------- MURS --------
+        */
         File imgf_wall = new File(WALL);
         String abs_wall = imgf_wall.getAbsolutePath();
         Image img_wall = new Image(abs_wall);
@@ -50,6 +59,9 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
+        /*
+        -------- ENTITES --------
+         */
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
@@ -95,6 +107,11 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
+
+        /*
+        -------- MURS TOP --------
+         */
+
 
         gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {

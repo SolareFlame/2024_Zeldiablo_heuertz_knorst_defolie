@@ -21,14 +21,25 @@ public class LabyDessin implements DessinJeu {
 
     private Map<String, AnimationState> animationStates = new HashMap<>();
 
+
+    final String PATH = "zeldiablo/ressources/textures/";
+
+    final String WALL = PATH + "wall/wall_rock_grass_midlarge.png";
+    final String EXIT = PATH + "ground/exit.png";
+    final String ENTER = PATH + "ground/enter.png";
+
+    final String PJ = PATH + "pj/";
+    final String MONSTRE = PATH + "monstre/";
+
+    final String LOUP_IDIOT = PATH + "loup_idiot/";
+    final String LOUP_NORMAL = PATH + "loup_normal/";
+    final String LOUP_ALPHA = PATH + "loup_alpha/";
+
+
+
     @Override
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
-        final String PATH = "zeldiablo/ressources/textures/";
 
-        final String WALL = PATH + "wall/wall_rock_midlarge.png";
-
-        final String PJ = PATH + "pj/";
-        final String MONSTRE = PATH + "monstre/";
 
         LabyJeu labyrinthe = (LabyJeu) jeu;
         final GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -37,11 +48,25 @@ public class LabyDessin implements DessinJeu {
          /*
         -------- SOL --------
         */
-        gc.setFill(Color.GREEN);
+        gc.setFill(Color.rgb(20, 160, 46));
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
-        gc.setFill(Color.PURPLE);
-        gc.fillRect(laby.sortie.getX()*TAILLE, laby.sortie.getY()*TAILLE, TAILLE, TAILLE);
+        //SORTIE
+        File imgf_exit = new File(EXIT);
+        String abs_exit = imgf_exit.getAbsolutePath();
+        Image img_exit = new Image(abs_exit);
+
+        gc.drawImage(img_exit, laby.sortie.getX() * TAILLE, laby.sortie.getY() * TAILLE, TAILLE, TAILLE);
+
+        //ENTREE
+        double imgsize = 1.7 * TAILLE;
+
+        File imgf_enter = new File(ENTER);
+        String abs_enter = imgf_enter.getAbsolutePath();
+        Image img_enter = new Image(abs_enter);
+
+        gc.drawImage(img_enter, laby.entree.getX() * TAILLE + TAILLE / 2 - imgsize / 2, laby.entree.getY() * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+
 
 
         /*
@@ -66,19 +91,7 @@ public class LabyDessin implements DessinJeu {
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
         if (labyrinthe.getLabyrinthe().monstres != null) {
-            for (Monstre monstre : laby.monstres) {
-                double monstre_x = monstre.getX();
-                double monstre_y = monstre.getY();
-
-                if (monstre_y <= pj_y) {
-                    try {
-                        String monstreId = "monstre_" + monstre.hashCode();
-                        chargerEntite(gc, monstre_x, monstre_y, MONSTRE, "gauche", "", monstreId);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+            chargerMonstres(gc, laby.monstres, pj_y, true);  // Pour les monstres au-dessus du joueur
         }
 
         String direction = Labyrinthe.direction;
@@ -93,19 +106,7 @@ public class LabyDessin implements DessinJeu {
         }
 
         if (labyrinthe.getLabyrinthe().monstres != null) {
-            for (Monstre monstre : laby.monstres) {
-                double monstre_x = monstre.getX();
-                double monstre_y = monstre.getY();
-
-                if (monstre_y > pj_y) {
-                    try {
-                        String monstreId = "monstre_" + monstre.hashCode();
-                        chargerEntite(gc, monstre_x, monstre_y, MONSTRE, "gauche", "", monstreId);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+            chargerMonstres(gc, labyrinthe.getLabyrinthe().monstres, pj_y, false);
         }
 
         /*
@@ -206,5 +207,21 @@ public class LabyDessin implements DessinJeu {
     public void dessinerHitbox(GraphicsContext gc, double x, double y) {
         gc.setStroke(Color.RED);
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+    }
+
+    private void chargerMonstres(GraphicsContext gc, ArrayList<Monstre> monstres, double pj_y, boolean isAbove) {
+        for (Monstre monstre : monstres) {
+            double monstre_x = monstre.getX();
+            double monstre_y = monstre.getY();
+
+            if ((isAbove && monstre_y <= pj_y) || (!isAbove && monstre_y > pj_y)) {
+                try {
+                    String monstreId = "monstre_" + monstre.hashCode();
+                    chargerEntite(gc, monstre_x, monstre_y, LOUP_ALPHA, "", "", monstreId);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 }

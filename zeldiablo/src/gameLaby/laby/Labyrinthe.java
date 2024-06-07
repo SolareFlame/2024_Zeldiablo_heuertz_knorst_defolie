@@ -29,7 +29,9 @@ public class Labyrinthe {
     public static final String BAS = "bas";
     public static final String GAUCHE = "gauche";
     public static final String DROITE = "droite";
+
     public static String direction = GAUCHE;
+    public static String etat = "idle";
 
     // Ajoutez les constantes pour les directions possibles
     public static final String[] ACTIONS = {HAUT, BAS, GAUCHE, DROITE};
@@ -227,6 +229,8 @@ public class Labyrinthe {
         this.pj.y = suivante[1];
 
         direction = action;
+
+
 
         deplacerMonstre();
     }

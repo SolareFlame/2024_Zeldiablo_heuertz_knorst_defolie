@@ -43,6 +43,7 @@ public class Labyrinthe {
     public Perso pj;
     public ArrayList<Monstre> monstres = new ArrayList<>();
     public Sortie sortie;
+    public Entree entree;
 
     /**
      * les murs du labyrinthe
@@ -79,6 +80,8 @@ public class Labyrinthe {
 
         if (getMur(posX, posY))
             return MUR;
+        if (posX == sortie.x && posY == sortie.y)
+            return SORTIE;
         else
             return VIDE;
 
@@ -90,7 +93,6 @@ public class Labyrinthe {
         direction = Direction;
         switch (caseDevant) {
             case MUR:
-                //MainLaby.RechargerNiveau();
                 break;
 
             case VIDE:
@@ -200,6 +202,7 @@ public class Labyrinthe {
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute PJ
                         this.pj = new Perso(colonne, numeroLigne);
+                        this.entree = new Entree(colonne, numeroLigne);
                         break;
                     case MONSTRE:
                         // pas de mur

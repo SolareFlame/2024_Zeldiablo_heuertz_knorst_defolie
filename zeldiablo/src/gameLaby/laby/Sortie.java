@@ -1,12 +1,12 @@
 package gameLaby.laby;
 
 /**
- * Classe representant le monstre dans le labyrinthe
+ * Classe representant la sortie dans le labyrinthe
  */
 public class Sortie extends Entite {
 
     /**
-     * Constructeur du monstre
+     * Constructeur d'une sortie
      *
      * @param dx Position selon x
      * @param dy Position selon y

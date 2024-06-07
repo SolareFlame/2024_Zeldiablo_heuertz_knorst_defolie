@@ -252,6 +252,7 @@ public class Labyrinthe {
                 pj.y = suivante2[1];
             }
         }
+        deplacerMonstres();
     }
 
     /**
@@ -262,9 +263,9 @@ public class Labyrinthe {
         //pos du perso
         int px = pj.x;
         int py = pj.y;
-        
+
         for (Monstre monstre : monstres) {
-            
+
             //pos du monstre
             int dx = monstre.x;
             int dy = monstre.y;

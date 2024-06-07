@@ -6,23 +6,18 @@ import static gameLaby.laby.Labyrinthe.direction;
 /**
  * gere un personnage situe en x,y
  */
-public class Perso {
+public class Perso extends Entite{
 
-    /**
-     * position du personnage
-     */
-    int x, y;
     int pv = 10;
 
     /**
-     * constructeur
+     * Constructeur de l'entité
      *
-     * @param dx position selon x
-     * @param dy position selon y
+     * @param dx Position selon x
+     * @param dy Position selon y
      */
     public Perso(int dx, int dy) {
-        this.x = dx;
-        this.y = dy;
+        super(dx, dy);
     }
 
     /**
@@ -70,19 +65,5 @@ public class Perso {
     // GETTER
     // ############################################
 
-    /**
-     * @return position x du personnage
-     */
-    public int getX() {
-        // getter
-        return this.x;
-    }
 
-    /**
-     * @return position y du personnage
-     */
-    public int getY() {
-        //getter
-        return this.y;
-    }
 }

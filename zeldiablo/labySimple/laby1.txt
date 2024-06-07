@@ -10,8 +10,8 @@ X.1.X....XX........X
 X...X....X.........X
 X..X..2.......X....X
 XX....X..X.....XXXXX
-XX.......XX......XMX
-X..MX....X......X..X
+XX.......XX......X2X
+X..3X....X......X..X
 X..X.....X.....X...X
 XX.X..............PX
 XXXXXXXXXXXXXXXXXXXX

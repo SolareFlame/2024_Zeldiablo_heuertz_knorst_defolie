@@ -3,41 +3,34 @@ package gameLaby.laby;
 /**
  * Classe representant le monstre dans le labyrinthe
  */
-public class Monstre extends Entite {
+public abstract class Monstre extends Entite implements IA{
 
-    private int pv = 3;
+    protected int pv;
+    protected Labyrinthe laby;
+    protected String name;
 
+    // LABYRINTHE EN PARALETRE CONSTRUCTEUR = JUSTE UNE REFERENCE MAIS CONNAISSANCE ENTIERETE LABYRINTHE
     /**
      * Constructeur du monstre
      *
      * @param dx Position selon x
      * @param dy Position selon y
      */
-    public Monstre(int dx, int dy) {
+    public Monstre(int dx, int dy, Labyrinthe lab) {
         super(dx, dy);
+        this.laby = lab;
     }
 
+    public abstract void seDeplacer();
+
     public void subirDegat() {
-        if (pv > 0)
+        if (pv > 0) {
+            System.out.println("PV restant au monstre " + name + " : " + this.getPv());
             pv--;
-        else
+        } else
             throw new Error("Un monstre mort a ete attaque");
     }
 
-    /**
-     * deplace le monstre en fonction de l'action.
-     *
-     * @param action une des actions possibles
-     */
-    public void deplacerMonstre(String action) {
-
-        // calcule case suivante
-        int[] suivante = Labyrinthe.getSuivant(this.x, this.y, action);
-
-        // on met a jour personnage
-        this.x = suivante[0];
-        this.y = suivante[1];
-    }
 
     /*public void deplacerMonstre() {
 
@@ -60,8 +53,6 @@ public class Monstre extends Entite {
     public void attaquer(Perso perso) {
         perso.subirDegat();
     }
-
-
 
     public int getPv() {
         return pv;

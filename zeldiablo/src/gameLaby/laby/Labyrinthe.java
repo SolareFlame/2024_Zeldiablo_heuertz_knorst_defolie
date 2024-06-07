@@ -22,6 +22,9 @@ public class Labyrinthe {
     public static final char MONSTRE = 'M';
     public static final char VIDE = '.';
     public static final char SORTIE = 'S';
+    public static final char IDIOT = '1';
+    public static final char MALIN = '2';
+    public static final char ALPHA = '3';
 
     /**
      * constantes actions possibles
@@ -207,11 +210,23 @@ public class Labyrinthe {
                         this.pj = new Perso(colonne, numeroLigne);
                         this.entree = new Entree(colonne, numeroLigne);
                         break;
-                    case MONSTRE:
+                    case IDIOT:
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Monstre
-                        this.monstres.add(new Monstre(colonne, numeroLigne));
+                        this.monstres.add(new Idiot(colonne, numeroLigne, this));
+                        break;
+                    case MALIN:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Monstre
+                        this.monstres.add(new Malin(colonne, numeroLigne, this));
+                        break;
+                    case ALPHA:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Monstre
+                        this.monstres.add(new Alpha(colonne, numeroLigne, this));
                         break;
                     case SORTIE:
                         // pas de mur
@@ -260,62 +275,8 @@ public class Labyrinthe {
      * gere la collision avec les murs et le personnage
      */
     public void deplacerMonstres() {
-        //pos du perso
-        int px = pj.x;
-        int py = pj.y;
-
         for (Monstre monstre : monstres) {
-
-            //pos du monstre
-            int dx = monstre.x;
-            int dy = monstre.y;
-
-            //diff entre les deux
-            int diffX = px - dx;
-            int diffY = py - dy;
-
-            //valeur absolue
-            int absDiffX = Math.abs(diffX);
-            int absDiffY = Math.abs(diffY);
-
-            //si la diff en x est plus grande que la diff en y
-            if (absDiffX > absDiffY) {
-                //si la diff en x est positive
-                if (diffX > 0) {
-                    //s'il n'y a pas de mur, de monstre ou de perso et si la case devant
-                    // le monstre n'est pas la suivante du perso
-                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy)) {
-                        if (pj.etrePresent(dx + 1, dy))
-                            monstre.attaquer(pj);
-                        else
-                            monstre.deplacerMonstre(DROITE);
-                    }
-
-                } else {
-                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy)){
-                        if(pj.etrePresent(dx - 1, dy))
-                            monstre.attaquer(pj);
-                        else
-                            monstre.deplacerMonstre(GAUCHE);
-                    }
-                }
-            } else {
-                if (diffY > 0) {
-                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) ){
-                        if (pj.etrePresent(dx, dy + 1))
-                            monstre.attaquer(pj);
-                        else
-                            monstre.deplacerMonstre(BAS);
-                    }
-                } else {
-                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1)){
-                        if (pj.etrePresent(dx, dy - 1))
-                            monstre.attaquer(pj);
-                        else
-                            monstre.deplacerMonstre(HAUT);
-                    }
-                }
-            }
+            monstre.seDeplacer();
         }
     }
 

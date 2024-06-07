@@ -3,10 +3,10 @@
 XXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXX
 XX..S...XX....1...XX
-X....XM...X........X
+X....X2...X........X
 X....X...X...X.....X
 X..XX....X.1..X...XX
-X......XXX..1.XM...X
+X......XXX..1.X2...X
 X...X....X.....X...X
 X..X..1.......X....X
 X.....X..X.....X...X

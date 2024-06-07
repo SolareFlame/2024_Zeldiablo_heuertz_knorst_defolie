@@ -4,16 +4,24 @@ package moteurJeu;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 // copied from: https://gist.github.com/james-d/8327842
@@ -102,13 +110,26 @@ public class MoteurJeu extends Application {
 
         // ajout des statistiques en bas de la fenetre
         final BorderPane root = new BorderPane();
-        root.setCenter(canvasContainer);
         root.setBottom(stats);
-
+        VBox vb = new VBox();
+        Text t = new Text("Labyrinthe");
+        t.setFont(Font.font("verdana",  FontWeight.BOLD, FontPosture.REGULAR, 60));
+        Button bplay = new Button("Play");
+        bplay.setMinHeight(40);
+        bplay.setMinWidth(175);
+        Button bquit = new Button("Quit");
+        bquit.setMinHeight(40);
+        bquit.setMinWidth(175);
+        vb.getChildren().addAll(t,bplay,bquit);
+        vb.setSpacing(50);
+        root.setCenter(vb);
+        vb.setAlignment(Pos.CENTER);
         // creation de la scene
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
 
 
         // listener clavier
@@ -138,8 +159,22 @@ public class MoteurJeu extends Application {
                     }
                 });
 
-        // lance la boucle de jeu
-        startAnimation(canvas);
+        bplay.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vb.getChildren().remove(bplay);
+                root.setCenter(canvasContainer);
+                startAnimation(canvas);
+            }
+        });
+
+        bquit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Platform.exit();
+            }
+        });
+
     }
 
     /**

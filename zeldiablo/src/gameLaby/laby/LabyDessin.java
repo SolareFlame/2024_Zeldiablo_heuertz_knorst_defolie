@@ -3,13 +3,14 @@ package gameLaby.laby;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,18 +20,10 @@ public class LabyDessin implements DessinJeu {
 
     public static final int TAILLE = 50;
 
+    private Map<String, AnimationState> animationStates = new HashMap<>();
 
-    /**
-     *
-     * @param jeu le jeu
-     * @param canvas canvas représentant l'état du jeu
-     */
     @Override
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
-
-        /*
-        -------------------- VARIABLES --------------------
-         */
         final String PATH = "zeldiablo/ressources/textures/";
 
         final String WALL = PATH + "wall/wall_rock_midlarge.png";
@@ -38,56 +31,37 @@ public class LabyDessin implements DessinJeu {
         final String PJ = PATH + "pj/";
         final String MONSTRE = PATH + "monstre/";
 
-
-        /*
-        -------------------- SETUP --------------------
-         */
-
         LabyJeu labyrinthe = (LabyJeu) jeu;
-
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         Labyrinthe laby = labyrinthe.getLabyrinthe();
 
-        /*
-        -------------------- SOL --------------------
-         */
         gc.setFill(Color.GREEN);
-        gc.fillRect(0, 0, laby.getLength()*TAILLE, laby.getLengthY()*TAILLE);
-
-        /*
-        -------------------- MURS --------------------
-         */
+        gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
         File imgf_wall = new File(WALL);
-        String abs_wall = imgf_wall .getAbsolutePath();
-        Image img_wall = new Image(abs_wall );
-
-        //MUR FACE
+        String abs_wall = imgf_wall.getAbsolutePath();
+        Image img_wall = new Image(abs_wall);
 
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
-                    gc.drawImage(img_wall ,j * TAILLE, i * TAILLE, TAILLE, TAILLE);
+                    gc.drawImage(img_wall, j * TAILLE, i * TAILLE, TAILLE, TAILLE);
                 }
             }
         }
-        /*
-        -------------------- ENTITEE --------------------
-         */
 
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
-        //MONSTRES DERRIERE LE JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
             for (Monstre monstre : laby.monstres) {
                 double monstre_x = monstre.getX();
                 double monstre_y = monstre.getY();
 
-                //si les coordonnées Y du monstre sont plus petites que celles du joueur
                 if (monstre_y <= pj_y) {
                     try {
-                        fillMonstre(gc, monstre_x, monstre_y);
+                        String monstreId = "monstre_" + monstre.hashCode();
+                        chargerEntite(gc, monstre_x, monstre_y, MONSTRE, "gauche", "", monstreId);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -95,34 +69,26 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
-        //JOUEUR
         String direction = Labyrinthe.direction;
-        String etat = "";
-
-        if(LabyJeu.attackAppuye) {
-            etat = "attack";
-        }
+        String etat = LabyJeu.attackAppuye ? "attack" : "idle";
 
         try {
-            chargerEntite(gc, pj_x, pj_y, PJ, direction, etat);
-            dessinerHitbox(gc, pj_x, pj_y); // Hitbox
+            String joueurId = "joueur";
+            chargerEntite(gc, pj_x, pj_y, PJ, direction, etat, joueurId);
+            dessinerHitbox(gc, pj_x, pj_y);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-
-        //MONSTRES DEVANT LE JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
             for (Monstre monstre : laby.monstres) {
                 double monstre_x = monstre.getX();
                 double monstre_y = monstre.getY();
 
-                //si les coordonnées Y du monstre sont plus grandes que celles du joueur
                 if (monstre_y > pj_y) {
-                    String direction_monstre = "gauche"; //temp
-
                     try {
-                        fillMonstre(gc, monstre_x, monstre_y);
+                        String monstreId = "monstre_" + monstre.hashCode();
+                        chargerEntite(gc, monstre_x, monstre_y, MONSTRE, "gauche", "", monstreId);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -130,100 +96,93 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
-        /*
-        -------------------- TOP --------------------
-         */
         gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
-                    if (i > 0 && !laby.getMur(j, i-1)) {
-                        gc.fillRect(j * TAILLE, (i * TAILLE)-TAILLE/2, TAILLE, TAILLE/2);
+                    if (i > 0 && !laby.getMur(j, i - 1)) {
+                        gc.fillRect(j * TAILLE, (i * TAILLE) - TAILLE / 2, TAILLE, TAILLE / 2);
                     } else {
-                        gc.fillRect(j * TAILLE, (i * TAILLE)-TAILLE, TAILLE, TAILLE);
+                        gc.fillRect(j * TAILLE, (i * TAILLE) - TAILLE, TAILLE, TAILLE);
                     }
                 }
             }
         }
     }
 
-    public void chargerEntite(GraphicsContext gc, double x, double y, String path, String dir, String etat) throws Exception {
-        int delay = 2; // nb frames pour chaque image
+    public void chargerEntite(GraphicsContext gc, double x, double y, String path, String dir, String etat, String entityId) throws Exception {
+        int delay;
 
+        // GERER L'ETAT DE L'ANIMATION
+        AnimationState currentAnimation = animationStates.get(entityId);
+
+        if (currentAnimation != null && (!currentAnimation.getEtat().equals(etat) || !currentAnimation.getDirection().equals(dir))) {
+            animationStates.remove(entityId);
+        }
+
+        // CHOIX DE L'ANIMATION
         switch (etat) {
-            case "attack": // ATTAQUE
+            case "attack":
                 delay = 2;
                 path += "attack/" + dir;
-                chargerAnimation(gc, x, y, path, delay);
+                chargerAnimation(gc, x, y, path, delay, entityId, etat, dir);
                 break;
-            default: // IDLE
+            default:
                 delay = 10;
                 path += "idle/" + dir;
-                chargerAnimation(gc, x, y, path, delay);
+                chargerAnimation(gc, x, y, path, delay, entityId, etat, dir);
         }
     }
 
-/*
--------------------- ANIMATION --------------------
-*/
+    public void chargerAnimation(GraphicsContext gc, double x, double y, String path, int delay, String entityId, String etat, String dir) throws Exception {
 
-    // Ajoutez un compteur de frames global et un booléen pour l'animation
-    private int frameCounter = 0;
-    private boolean animationEnCours = false;
+        // SI L'ANIMATION N'EXISTE PAS DANS LA MAP
+        if (!animationStates.containsKey(entityId)) {
+            ArrayList<Image> images = new ArrayList<>();
+            File folder = new File(path);
+            System.out.println("Chemin du dossier: " + folder.getAbsolutePath());
+            File[] listOfFiles = folder.listFiles();
 
-    /**
-     * @param gc GraphicsContext
-     * @param x position x (de l'entité)
-     * @param y position y (de l'entité)
-     * @param path chemin du dossier de frames
-     * @param delay nombre de frames pour chaque image
-     * @throws Exception
-     */
-    public void chargerAnimation(GraphicsContext gc, double x, double y, String path, int delay) throws Exception {
-        ArrayList<Image> images = new ArrayList<>(); // liste des images
-
-        File folder = new File(path);
-        System.out.println("Chemin du dossier: " + folder.getAbsolutePath());
-        File[] listOfFiles = folder.listFiles(); // liste des fichiers dans le dossier
-
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) { // ajout des images dans la liste
-                System.out.println("-> " + file.getName());
-                if (file.isFile()) {
-                    String abs_path = file.getAbsolutePath();
-                    Image img = new Image(abs_path);
-                    images.add(img);
+            if (listOfFiles != null) {
+                for (File file : listOfFiles) {
+                    System.out.println("-> " + file.getName());
+                    if (file.isFile()) {
+                        String abs_path = file.getAbsolutePath();
+                        Image img = new Image(abs_path);
+                        images.add(img);
+                    }
                 }
+            } else {
+                System.out.println("Le dossier est vide ou n'existe pas.");
             }
-        } else {
-            System.out.println("Le dossier est vide ou n'existe pas.");
+
+            if (images.isEmpty()) {
+                throw new Exception("Aucune image");
+            }
+
+            AnimationState n_etat = new AnimationState(images, etat, dir);
+            animationStates.put(entityId, n_etat);
         }
+
+        // SI L'ANIMATION EXISTE DANS LA MAP
+        AnimationState currentEtat = animationStates.get(entityId);
+        ArrayList<Image> images = currentEtat.getImages();
 
         double imgsize = 1.7 * TAILLE;
 
-        // Vérifie si des images ont été chargées
-        if (images.isEmpty()) {
-            throw new Exception("Aucune image");
+        if (!currentEtat.isAnimationEnCours()) {
+            currentEtat.startAnimation();
         }
 
-        if (!animationEnCours) {
-            animationEnCours = true;
-            frameCounter = 0; // Réinitialiser le compteur de frames pour démarrer l'animation
-        }
+        int frameIndex = (currentEtat.getFrameCounter() / delay) % images.size();
 
-        // Détermine l'index de l'image à afficher en fonction du nombre de frames écoulées
-        int frameIndex = (frameCounter / delay) % images.size();
-
-        // Affiche l'image de l'animation
         Image img = images.get(frameIndex);
         gc.drawImage(img, x * TAILLE + TAILLE / 2 - imgsize / 2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
 
-        // Incrémente le compteur de frames
-        frameCounter++;
+        currentEtat.addFrameCounter();
 
-        // Vérifie si l'animation est terminée
-        if (frameCounter / delay >= images.size()) {
-            animationEnCours = false; // Animation terminée
+        if (currentEtat.getFrameCounter() / delay >= images.size()) {
+            currentEtat.stopAnimation();
         }
     }
 
@@ -231,18 +190,4 @@ public class LabyDessin implements DessinJeu {
         gc.setStroke(Color.RED);
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
     }
-
-
-
-
-
-    public void fillMonstre(GraphicsContext gc, double x, double y) {
-        gc.setFill(Color.RED);
-        gc.fillRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
-    }
-
-    public void fillPlayer(GraphicsContext gc, double x, double y) {
-
-    }
 }
-

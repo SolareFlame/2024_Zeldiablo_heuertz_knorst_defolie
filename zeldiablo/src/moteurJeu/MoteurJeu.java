@@ -3,24 +3,28 @@ package moteurJeu;
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
 //import gameLaby.laby.SoundLoader;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.media.MediaView;
-
-import java.io.File;
 
 // copied from: https://gist.github.com/james-d/8327842
 // and modified to use canvas drawing instead of shapes
@@ -108,12 +112,24 @@ public class MoteurJeu extends Application {
 
         // ajout des statistiques en bas de la fenetre
         final BorderPane root = new BorderPane();
-        root.setCenter(canvasContainer);
         root.setBottom(stats);
+        VBox vb = new VBox();
+        Text t = new Text("Labyrinthe");
+        t.setFont(Font.font("verdana",  FontWeight.BOLD, FontPosture.REGULAR, 60));
+        Button bplay = new Button("Play");
+        bplay.setMinHeight(40);
+        bplay.setMinWidth(175);
+        Button bquit = new Button("Quit");
+        bquit.setMinHeight(40);
+        bquit.setMinWidth(175);
+        vb.getChildren().addAll(t,bplay,bquit);
+        vb.setSpacing(50);
+        root.setCenter(vb);
+        vb.setAlignment(Pos.CENTER);
 
 
 
-        /**
+        ///**
 
         // TODO Auto-generated method stub
         //Initialising path of the media file, replace this with your file path
@@ -131,11 +147,15 @@ public class MoteurJeu extends Application {
 
         root.getChildren().add(mediaView);
         mediaPlayer.play();
-         **/
+
+        //**/
+
         // creation de la scene
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
 
 
 
@@ -171,8 +191,22 @@ public class MoteurJeu extends Application {
                     }
                 });
 
-        // lance la boucle de jeu
-        startAnimation(canvas);
+        bplay.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vb.getChildren().remove(bplay);
+                root.setCenter(canvasContainer);
+                startAnimation(canvas);
+            }
+        });
+
+        bquit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Platform.exit();
+            }
+        });
+
     }
 
     /**
@@ -221,8 +255,8 @@ public class MoteurJeu extends Application {
         timer.start();
         /** MUSIQUE A ENLEVER SI PROBLEME **/
         /**
-        SoundLoader s = new SoundLoader();
-        s.playfirtsound();
-    **/
+         SoundLoader s = new SoundLoader();
+         s.playfirtsound();
+         **/
     }
 }

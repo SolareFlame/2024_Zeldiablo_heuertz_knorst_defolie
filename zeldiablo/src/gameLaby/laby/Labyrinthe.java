@@ -234,27 +234,18 @@ public class Labyrinthe {
 
     /**
      * deplace le personnage de deux cases
-     *
      */
     public void dashDe2Cases() {
         int[] suivante = getSuivant(pj.x, pj.y, direction);
         int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
 
-        if (!this.murs[suivante[0]][suivante[1]]) {
-            for (Monstre monstre : monstres) {
-                if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
-                    return;
-                }
-            }
+        // si la case suivante n'est pas un mur et qu'il n'y a pas de monstre
+        if (!this.murs[suivante[0]][suivante[1]] && !estMonstre(suivante[0], suivante[1])) {
             pj.x = suivante[0];
             pj.y = suivante[1];
 
-            if (!this.murs[suivante2[0]][suivante2[1]]) {
-                for (Monstre monstre : monstres) {
-                    if (monstre.x == suivante2[0] && monstre.y == suivante2[1]) {
-                        return;
-                    }
-                }
+            // si la case suivante de la case suivante n'est pas un mur et qu'il n'y a pas de monstre
+            if (!this.murs[suivante2[0]][suivante2[1]] && !estMonstre(suivante2[0], suivante2[1])) {
                 pj.x = suivante2[0];
                 pj.y = suivante2[1];
             }

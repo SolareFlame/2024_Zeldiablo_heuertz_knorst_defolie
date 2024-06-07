@@ -21,6 +21,7 @@ public class Labyrinthe {
     public static final char PJ = 'P';
     public static final char MONSTRE = 'M';
     public static final char VIDE = '.';
+    public static final char SORTIE = 'S';
 
     /**
      * constantes actions possibles
@@ -41,6 +42,8 @@ public class Labyrinthe {
      */
     public Perso pj;
     public ArrayList<Monstre> monstres = new ArrayList<>();
+    public Sortie sortie;
+    public Entree entree;
 
     /**
      * les murs du labyrinthe
@@ -77,6 +80,8 @@ public class Labyrinthe {
 
         if (getMur(posX, posY))
             return MUR;
+        if (posX == sortie.x && posY == sortie.y)
+            return SORTIE;
         else
             return VIDE;
 
@@ -85,18 +90,16 @@ public class Labyrinthe {
     }
 
     public void traitement(char caseDevant, String Direction) {
+        direction = Direction;
         switch (caseDevant) {
             case MUR:
-                direction = Direction;
                 break;
 
             case VIDE:
-                direction = Direction;
                 deplacerPerso(direction);
                 break;
 
             case MONSTRE:
-                direction = Direction;
                 int[] suivante = getSuivant(pj.x, pj.y, direction);
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
@@ -107,6 +110,10 @@ public class Labyrinthe {
                         break;
                     }
                 }
+                break;
+
+            case SORTIE:
+                MainLaby.chargerProchainNiveau();
                 break;
 
             default:
@@ -169,6 +176,7 @@ public class Labyrinthe {
         this.murs = new boolean[nbColonnes][nbLignes];
         this.pj = null;
         this.random = new Random();
+        this.sortie = null;
 
         // lecture des cases
         String ligne = bfRead.readLine();
@@ -194,12 +202,19 @@ public class Labyrinthe {
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute PJ
                         this.pj = new Perso(colonne, numeroLigne);
+                        this.entree = new Entree(colonne, numeroLigne);
                         break;
                     case MONSTRE:
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Monstre
                         this.monstres.add(new Monstre(colonne, numeroLigne));
+                        break;
+                    case SORTIE:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Monstre
+                        this.sortie = new Sortie(colonne, numeroLigne);
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);

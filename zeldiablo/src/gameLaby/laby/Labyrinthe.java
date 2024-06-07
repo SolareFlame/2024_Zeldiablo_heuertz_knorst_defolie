@@ -98,6 +98,7 @@ public class Labyrinthe {
             case VIDE:
                 pj.deplacerPerso(direction);
                 deplacerMonstres();
+                etatNiveau();
                 break;
 
             case MONSTRE:
@@ -105,9 +106,10 @@ public class Labyrinthe {
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
                         pj.attaquer(monstre);
-                        if (monstre.getPv() == 0) {
+                        if (monstre.getPv() == 0)
                             monstres.remove(monstre);
-                        }
+                        deplacerMonstres();
+                        etatNiveau();
                         break;
                     }
                 }
@@ -252,22 +254,20 @@ public class Labyrinthe {
         }
     }
 
-
-
     /**
      * le monstre se déplace en se rapprochant du personnage
      * gere la collision avec les murs et le personnage
      */
     public void deplacerMonstres() {
+        //pos du perso
+        int px = pj.x;
+        int py = pj.y;
+        
         for (Monstre monstre : monstres) {
-
+            
             //pos du monstre
             int dx = monstre.x;
             int dy = monstre.y;
-
-            //pos du perso
-            int px = pj.x;
-            int py = pj.y;
 
             //diff entre les deux
             int diffX = px - dx;
@@ -335,6 +335,12 @@ public class Labyrinthe {
     public boolean etreFini() {
         // TODO
         return false;
+    }
+
+    public void etatNiveau() {
+        if (pj.pv == 0){
+            MainLaby.RechargerNiveau();
+            }
     }
 
     // ##################################

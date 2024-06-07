@@ -58,7 +58,7 @@ public class Monstre extends Entite {
     }*/
 
     public void attaquer(Perso perso) {
-        //perso.subirDegat();
+        perso.subirDegat();
     }
 
 

@@ -9,6 +9,8 @@ import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
 
 import java.io.File;
+import java.util.ArrayList;
+
 
 /**
  * Classe LabyDessin
@@ -29,19 +31,13 @@ public class LabyDessin implements DessinJeu {
         /*
         -------------------- VARIABLES --------------------
          */
-        final String PATH = "zeldiablo/textures/";
-
-        final String GAUCHE = PATH + "pj/pj_left_large.png";
-        final String DROITE = PATH + "pj/pj_right_large.png";
-        final String HAUT = PATH + "pj/pj_up_large.png";
-        final String DOWN = PATH + "pj/pj_down_large.png";
-
-        final String MONSTRE_GAUCHE = PATH + "monster/monstre_left_large.png";
-        final String MONSTRE_DROITE = PATH + "monster/monstre_right_large.png";
-        final String MONSTRE_HAUT = PATH + "monster/monstre_up_large.png";
-        final String MONSTRE_DOWN = PATH + "monster/monstre_down_large.png";
+        final String PATH = "zeldiablo/ressources/textures/";
 
         final String WALL = PATH + "wall/wall_rock_midlarge.png";
+
+        final String PJ = PATH + "pj/";
+        final String MONSTRE = PATH + "monstre/";
+
 
         /*
         -------------------- SETUP --------------------
@@ -62,7 +58,6 @@ public class LabyDessin implements DessinJeu {
         -------------------- MURS --------------------
          */
 
-
         File imgf_wall = new File(WALL);
         String abs_wall = imgf_wall .getAbsolutePath();
         Image img_wall = new Image(abs_wall );
@@ -76,83 +71,64 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
-
-
         /*
-        -------------------- PLAYER --------------------
+        -------------------- ENTITEE --------------------
          */
 
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
-        String direction = Labyrinthe.direction;
-        switch (direction) {
-            case "haut":
-                direction = HAUT;
-                break;
-            case "bas":
-                direction = DOWN;
-                break;
-            case "gauche":
-                direction = GAUCHE;
-                break;
-            case "droite":
-                direction = DROITE;
-                break;
-        }
-
-
-
-        try {
-            chargerEntite(gc, pj_x, pj_y, direction);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
-
-
-        /*
-        -------------------- MONSTRES --------------------
-         */
+        //MONSTRES DERRIERE LE JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
             for (Monstre monstre : laby.monstres) {
                 double monstre_x = monstre.getX();
                 double monstre_y = monstre.getY();
 
-                String direction_monstre = "gauche"; //temp
-                switch (direction_monstre) {
-                    case "haut":
-                        direction_monstre = MONSTRE_HAUT;
-                        break;
-                    case "bas":
-                        direction_monstre = MONSTRE_DOWN;
-                        break;
-                    case "gauche":
-                        direction_monstre = MONSTRE_GAUCHE;
-                        break;
-                    case "droite":
-                        direction_monstre = MONSTRE_DROITE;
-                        break;
+                //si les coordonnées Y du monstre sont plus petites que celles du joueur
+                if (monstre_y <= pj_y) {
+                    try {
+                        fillMonstre(gc, monstre_x, monstre_y);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-
-
-
-                try {
-                    chargerEntite(gc, monstre_x, monstre_y, direction_monstre);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-
             }
         }
 
+        //JOUEUR
+        String direction = Labyrinthe.direction;
+        String etat = "";
+
+        if(LabyJeu.attackAppuye) {
+            etat = "attack";
+        }
+
+        try {
+            chargerEntite(gc, pj_x, pj_y, PJ, direction, etat);
+            dessinerHitbox(gc, pj_x, pj_y); // Hitbox
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 
+        //MONSTRES DEVANT LE JOUEUR
+        if (labyrinthe.getLabyrinthe().monstres != null) {
+            for (Monstre monstre : laby.monstres) {
+                double monstre_x = monstre.getX();
+                double monstre_y = monstre.getY();
 
+                //si les coordonnées Y du monstre sont plus grandes que celles du joueur
+                if (monstre_y > pj_y) {
+                    String direction_monstre = "gauche"; //temp
 
-
+                    try {
+                        fillMonstre(gc, monstre_x, monstre_y);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
 
         /*
         -------------------- TOP --------------------
@@ -169,25 +145,104 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
-
-
-
     }
 
-    public void chargerEntite(GraphicsContext gc, double x, double y, String path) throws Exception {
+    public void chargerEntite(GraphicsContext gc, double x, double y, String path, String dir, String etat) throws Exception {
+        int delay = 2; // nb frames pour chaque image
+
+        switch (etat) {
+            case "attack": // ATTAQUE
+                delay = 2;
+                path += "attack/" + dir;
+                chargerAnimation(gc, x, y, path, delay);
+                break;
+            default: // IDLE
+                delay = 10;
+                path += "idle/" + dir;
+                chargerAnimation(gc, x, y, path, delay);
+        }
+    }
+
+/*
+-------------------- ANIMATION --------------------
+*/
+
+    // Ajoutez un compteur de frames global et un booléen pour l'animation
+    private int frameCounter = 0;
+    private boolean animationEnCours = false;
+
+    /**
+     * @param gc GraphicsContext
+     * @param x position x (de l'entité)
+     * @param y position y (de l'entité)
+     * @param path chemin du dossier de frames
+     * @param delay nombre de frames pour chaque image
+     * @throws Exception
+     */
+    public void chargerAnimation(GraphicsContext gc, double x, double y, String path, int delay) throws Exception {
+        ArrayList<Image> images = new ArrayList<>(); // liste des images
+
+        File folder = new File(path);
+        System.out.println("Chemin du dossier: " + folder.getAbsolutePath());
+        File[] listOfFiles = folder.listFiles(); // liste des fichiers dans le dossier
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) { // ajout des images dans la liste
+                System.out.println("-> " + file.getName());
+                if (file.isFile()) {
+                    String abs_path = file.getAbsolutePath();
+                    Image img = new Image(abs_path);
+                    images.add(img);
+                }
+            }
+        } else {
+            System.out.println("Le dossier est vide ou n'existe pas.");
+        }
+
         double imgsize = 1.7 * TAILLE;
 
-        File imageFile = new File(path);
-        String abs_path = imageFile.getAbsolutePath();
+        // Vérifie si des images ont été chargées
+        if (images.isEmpty()) {
+            throw new Exception("Aucune image");
+        }
 
-        //carré (vide) de collision (coutour rouge)
+        if (!animationEnCours) {
+            animationEnCours = true;
+            frameCounter = 0; // Réinitialiser le compteur de frames pour démarrer l'animation
+        }
+
+        // Détermine l'index de l'image à afficher en fonction du nombre de frames écoulées
+        int frameIndex = (frameCounter / delay) % images.size();
+
+        // Affiche l'image de l'animation
+        Image img = images.get(frameIndex);
+        gc.drawImage(img, x * TAILLE + TAILLE / 2 - imgsize / 2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+
+        // Incrémente le compteur de frames
+        frameCounter++;
+
+        // Vérifie si l'animation est terminée
+        if (frameCounter / delay >= images.size()) {
+            animationEnCours = false; // Animation terminée
+        }
+    }
+
+    public void dessinerHitbox(GraphicsContext gc, double x, double y) {
         gc.setStroke(Color.RED);
-        gc.setLineWidth(1);
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+    }
 
 
-        //image
-        Image img = new Image(abs_path);
-        gc.drawImage(img,x * TAILLE + TAILLE/2 - imgsize/2, y * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+
+
+
+    public void fillMonstre(GraphicsContext gc, double x, double y) {
+        gc.setFill(Color.RED);
+        gc.fillRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+    }
+
+    public void fillPlayer(GraphicsContext gc, double x, double y) {
+
     }
 }
+

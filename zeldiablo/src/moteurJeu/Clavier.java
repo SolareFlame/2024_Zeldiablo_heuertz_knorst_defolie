@@ -7,7 +7,7 @@ public class Clavier {
     /**
      * controle appuyes
      */
-    public boolean haut, bas, gauche, droite, dash;
+    public boolean haut, bas, gauche, droite, dash, attack;
 
     /**
      * stocke les commandes
@@ -40,6 +40,10 @@ public class Clavier {
 
             case SHIFT:
                 this.dash = true;
+                break;
+
+            case A:
+                this.attack = true;
                 break;
         }
 
@@ -76,7 +80,11 @@ public class Clavier {
 
             case SHIFT:
                 this.dash = false;
+                break;
 
+            case A:
+                this.attack = false;
+                break;
         }
     }
 }

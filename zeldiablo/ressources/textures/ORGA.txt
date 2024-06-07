@@ -1,0 +1,15 @@
+1. Les noms des fichiers ne sont pas importants, les noms des répertoires le sont.
+2. <entitee>/<action>/<direction>/frames
+
+<action>:
+	- idle/ (default)
+	- attack/
+	- dash/
+
+<direction>:
+	- HAUT/
+	- BAS/
+	- DROITE/
+	- GAUCHE/
+
+/!\ BIEN RESPECTER LES ECRITURES DES REPERTOIRES.

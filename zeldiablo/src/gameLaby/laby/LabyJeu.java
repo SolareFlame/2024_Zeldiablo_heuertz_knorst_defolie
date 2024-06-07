@@ -10,11 +10,13 @@ import java.io.IOException;
  */
 public class LabyJeu implements Jeu {
     private final Labyrinthe labyrinthe;
-    private boolean hautAppuye = false;
-    private boolean basAppuye = false;
-    private boolean gaucheAppuye = false;
-    private boolean droiteAppuye = false;
-    private boolean dashAppuye = false;
+    public static boolean hautAppuye = false;
+    public static boolean basAppuye = false;
+    public static boolean gaucheAppuye = false;
+    public static boolean droiteAppuye = false;
+
+    public static boolean dashAppuye = false;
+    public static boolean attackAppuye = false;
 
 
     /**
@@ -34,6 +36,9 @@ public class LabyJeu implements Jeu {
      */
     @Override
     public void update(double deltaTime, Clavier clavier) {
+        if(clavier.attack && !attackAppuye) {
+            attackAppuye = true;
+        }
         if(clavier.dash && !dashAppuye) {
             labyrinthe.dashDe2Cases();
             dashAppuye = true;
@@ -54,6 +59,9 @@ public class LabyJeu implements Jeu {
             labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.DROITE), Labyrinthe.DROITE);
             droiteAppuye = true;
         }
+
+
+        // FALSE
         if (!clavier.droite) {
             droiteAppuye = false;
         }
@@ -68,6 +76,9 @@ public class LabyJeu implements Jeu {
         }
         if(!clavier.dash){
             dashAppuye = false;
+        }
+        if(!clavier.attack) {
+            attackAppuye = false;
         }
     }
 

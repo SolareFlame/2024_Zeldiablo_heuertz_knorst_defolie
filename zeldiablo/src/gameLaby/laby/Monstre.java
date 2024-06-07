@@ -22,6 +22,9 @@ public class Monstre extends Entite {
     }
 
     public void subirDegat() {
-        pv--;
+        if (pv > 0)
+            pv--;
+        else
+            throw new Error("Un monstre mort a ete attaque");
     }
 }

@@ -264,25 +264,61 @@ public class Labyrinthe {
 
 
     /**
-     * deplace le monstre en fonction de l'action.
+     * le monstre se déplace en se rapprochant du personnage
      * gere la collision avec les murs et le personnage
      */
     public void deplacerMonstre() {
-
         for (Monstre monstre : monstres) {
-            String action = ACTIONS[random.nextInt(ACTIONS.length)];
-            int[] suivante = getSuivant(monstre.x, monstre.y, action);
+            //pos du monstre
+            int dx = monstre.x;
+            int dy = monstre.y;
+            //pos du perso
+            int px = pj.x;
+            int py = pj.y;
+            //diff entre les deux
+            int diffX = px - dx;
+            int diffY = py - dy;
+            //valeur absolue
+            int absDiffX = Math.abs(diffX);
+            int absDiffY = Math.abs(diffY);
 
-            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-                for (Monstre monstre2 : monstres) {
-                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                        return;
+            //si la diff en x est plus grande que la diff en y
+            if (absDiffX > absDiffY) {
+                //si la diff en x est positive
+                if (diffX > 0) {
+                    //si il n'y a pas de mur, de monstre ou de perso et si la case devant
+                    // le monstre n'est pas la suivante du perso
+                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy) && !(dx + 1 == pj.x && dy == pj.y)) {
+                        monstre.x++;
+                    }
+                } else {
+                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy) && !(dx - 1 == pj.x && dy == pj.y)) {
+                        monstre.x--;
                     }
                 }
-                monstre.x = suivante[0];
-                monstre.y = suivante[1];
+            } else {
+                if (diffY > 0) {
+                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) && !(dx == pj.x && dy + 1 == pj.y)) {
+                        monstre.y++;
+                    }
+                } else {
+                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1) && !(dx == pj.x && dy - 1 == pj.y)) {
+                        monstre.y--;
+                    }
+                }
             }
         }
+    }
+
+
+
+    public boolean estMonstre(int x, int y) {
+        for (Monstre monstre : monstres) {
+            if (monstre.x == x && monstre.y == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

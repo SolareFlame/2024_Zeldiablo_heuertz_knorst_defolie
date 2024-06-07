@@ -87,8 +87,6 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- ENTITES --------
          */
-
-
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
@@ -114,6 +112,8 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- MURS TOP --------
          */
+
+
         gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {

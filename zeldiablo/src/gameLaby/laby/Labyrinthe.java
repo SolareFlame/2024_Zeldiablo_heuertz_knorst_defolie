@@ -96,7 +96,9 @@ public class Labyrinthe {
                 break;
 
             case VIDE:
-                deplacerPerso(direction);
+                pj.deplacerPerso(direction);
+                deplacerMonstres();
+                etatNiveau();
                 break;
 
             case MONSTRE:
@@ -104,9 +106,10 @@ public class Labyrinthe {
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
                         pj.attaquer(monstre);
-                        if (monstre.getPv() == 0) {
+                        if (monstre.getPv() == 0)
                             monstres.remove(monstre);
-                        }
+                        deplacerMonstres();
+                        etatNiveau();
                         break;
                     }
                 }
@@ -232,25 +235,9 @@ public class Labyrinthe {
     }
 
     /**
-     * deplace le personnage en fonction de l'action.
-     * gere la collision avec les murs et le monstre
+     * deplace le personnage de deux cases
      *
-     * @param action une des actions possibles
      */
-    public void deplacerPerso(String action) {
-
-        // calcule case suivante
-        int[] suivante = getSuivant(pj.x, pj.y, action);
-
-        // on met a jour personnage
-        this.pj.x = suivante[0];
-        this.pj.y = suivante[1];
-
-        direction = action;
-
-        deplacerMonstre();
-    }
-
     public void dashDe2Cases() {
         int[] suivante = getSuivant(pj.x, pj.y, direction);
         int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
@@ -276,28 +263,77 @@ public class Labyrinthe {
         }
     }
 
-
-
     /**
-     * deplace le monstre en fonction de l'action.
+     * le monstre se déplace en se rapprochant du personnage
      * gere la collision avec les murs et le personnage
      */
-    public void deplacerMonstre() {
-
+    public void deplacerMonstres() {
+        //pos du perso
+        int px = pj.x;
+        int py = pj.y;
+        
         for (Monstre monstre : monstres) {
-            String action = ACTIONS[random.nextInt(ACTIONS.length)];
-            int[] suivante = getSuivant(monstre.x, monstre.y, action);
+            
+            //pos du monstre
+            int dx = monstre.x;
+            int dy = monstre.y;
 
-            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1]) && (this.sortie.x != suivante[0] || this.sortie.y != suivante[1])) {
-                for (Monstre monstre2 : monstres) {
-                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                        return;
+            //diff entre les deux
+            int diffX = px - dx;
+            int diffY = py - dy;
+
+            //valeur absolue
+            int absDiffX = Math.abs(diffX);
+            int absDiffY = Math.abs(diffY);
+
+            //si la diff en x est plus grande que la diff en y
+            if (absDiffX > absDiffY) {
+                //si la diff en x est positive
+                if (diffX > 0) {
+                    //s'il n'y a pas de mur, de monstre ou de perso et si la case devant
+                    // le monstre n'est pas la suivante du perso
+                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy)) {
+                        if (pj.etrePresent(dx + 1, dy))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(DROITE);
+                    }
+
+                } else {
+                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy)){
+                        if(pj.etrePresent(dx - 1, dy))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(GAUCHE);
                     }
                 }
-                monstre.x = suivante[0];
-                monstre.y = suivante[1];
+            } else {
+                if (diffY > 0) {
+                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) ){
+                        if (pj.etrePresent(dx, dy + 1))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(BAS);
+                    }
+                } else {
+                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1)){
+                        if (pj.etrePresent(dx, dy - 1))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(HAUT);
+                    }
+                }
             }
         }
+    }
+
+    public boolean estMonstre(int x, int y) {
+        for (Monstre monstre : monstres) {
+            if (monstre.x == x && monstre.y == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -308,6 +344,12 @@ public class Labyrinthe {
     public boolean etreFini() {
         // TODO
         return false;
+    }
+
+    public void etatNiveau() {
+        if (pj.pv == 0){
+            MainLaby.RechargerNiveau();
+            }
     }
 
     // ##################################

@@ -303,27 +303,45 @@ public class Labyrinthe {
                 if (diffX > 0) {
                     //si il n'y a pas de mur, de monstre ou de perso et si la case devant
                     // le monstre n'est pas la suivante du perso
-                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy) && !(dx + 1 == pj.x && dy == pj.y)) {
+                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy) && !pj.etrePresent(dx + 1, dy)) {
                         monstre.x++;
                     }
                 } else {
-                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy) && !(dx - 1 == pj.x && dy == pj.y)) {
+                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy) && !pj.etrePresent(dx - 1, dy)) {
                         monstre.x--;
                     }
                 }
             } else {
                 if (diffY > 0) {
-                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) && !(dx == pj.x && dy + 1 == pj.y)) {
+                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) && !pj.etrePresent(dx, dy + 1)) {
                         monstre.y++;
                     }
                 } else {
-                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1) && !(dx == pj.x && dy - 1 == pj.y)) {
+                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1) && !pj.etrePresent(dx, dy - 1)) {
                         monstre.y--;
                     }
                 }
             }
         }
     }
+
+    /*public void deplacerMonstre() {
+
+        for (Monstre monstre : monstres) {
+            String action = ACTIONS[random.nextInt(ACTIONS.length)];
+            int[] suivante = getSuivant(monstre.x, monstre.y, action);
+
+            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
+                for (Monstre monstre2 : monstres) {
+                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
+                        return;
+                    }
+                }
+                monstre.x = suivante[0];
+                monstre.y = suivante[1];
+            }
+        }
+    }*/
 
 
 

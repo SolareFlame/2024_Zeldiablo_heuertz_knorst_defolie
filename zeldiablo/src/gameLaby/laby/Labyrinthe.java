@@ -96,7 +96,8 @@ public class Labyrinthe {
                 break;
 
             case VIDE:
-                deplacerPerso(direction);
+                pj.deplacerPerso(direction);
+                deplacerMonstres();
                 break;
 
             case MONSTRE:
@@ -232,25 +233,9 @@ public class Labyrinthe {
     }
 
     /**
-     * deplace le personnage en fonction de l'action.
-     * gere la collision avec les murs et le monstre
+     * deplace le personnage de deux cases
      *
-     * @param action une des actions possibles
      */
-    public void deplacerPerso(String action) {
-
-        // calcule case suivante
-        int[] suivante = getSuivant(pj.x, pj.y, action);
-
-        // on met a jour personnage
-        this.pj.x = suivante[0];
-        this.pj.y = suivante[1];
-
-        direction = action;
-
-        deplacerMonstre();
-    }
-
     public void dashDe2Cases() {
         int[] suivante = getSuivant(pj.x, pj.y, direction);
         int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
@@ -282,17 +267,21 @@ public class Labyrinthe {
      * le monstre se déplace en se rapprochant du personnage
      * gere la collision avec les murs et le personnage
      */
-    public void deplacerMonstre() {
+    public void deplacerMonstres() {
         for (Monstre monstre : monstres) {
+
             //pos du monstre
             int dx = monstre.x;
             int dy = monstre.y;
+
             //pos du perso
             int px = pj.x;
             int py = pj.y;
+
             //diff entre les deux
             int diffX = px - dx;
             int diffY = py - dy;
+
             //valeur absolue
             int absDiffX = Math.abs(diffX);
             int absDiffY = Math.abs(diffY);
@@ -301,49 +290,42 @@ public class Labyrinthe {
             if (absDiffX > absDiffY) {
                 //si la diff en x est positive
                 if (diffX > 0) {
-                    //si il n'y a pas de mur, de monstre ou de perso et si la case devant
+                    //s'il n'y a pas de mur, de monstre ou de perso et si la case devant
                     // le monstre n'est pas la suivante du perso
-                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy) && !pj.etrePresent(dx + 1, dy)) {
-                        monstre.x++;
+                    if (!murs[dx + 1][dy] && !estMonstre(dx + 1, dy)) {
+                        if (pj.etrePresent(dx + 1, dy))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(DROITE);
                     }
+
                 } else {
-                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy) && !pj.etrePresent(dx - 1, dy)) {
-                        monstre.x--;
+                    if (!murs[dx - 1][dy] && !estMonstre(dx - 1, dy)){
+                        if(pj.etrePresent(dx - 1, dy))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(GAUCHE);
                     }
                 }
             } else {
                 if (diffY > 0) {
-                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) && !pj.etrePresent(dx, dy + 1)) {
-                        monstre.y++;
+                    if (!murs[dx][dy + 1] && !estMonstre(dx, dy + 1) ){
+                        if (pj.etrePresent(dx, dy + 1))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(BAS);
                     }
                 } else {
-                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1) && !pj.etrePresent(dx, dy - 1)) {
-                        monstre.y--;
+                    if (!murs[dx][dy - 1] && !estMonstre(dx, dy - 1)){
+                        if (pj.etrePresent(dx, dy - 1))
+                            monstre.attaquer(pj);
+                        else
+                            monstre.deplacerMonstre(HAUT);
                     }
                 }
             }
         }
     }
-
-    /*public void deplacerMonstre() {
-
-        for (Monstre monstre : monstres) {
-            String action = ACTIONS[random.nextInt(ACTIONS.length)];
-            int[] suivante = getSuivant(monstre.x, monstre.y, action);
-
-            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-                for (Monstre monstre2 : monstres) {
-                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                        return;
-                    }
-                }
-                monstre.x = suivante[0];
-                monstre.y = suivante[1];
-            }
-        }
-    }*/
-
-
 
     public boolean estMonstre(int x, int y) {
         for (Monstre monstre : monstres) {

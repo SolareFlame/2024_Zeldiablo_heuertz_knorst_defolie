@@ -21,6 +21,7 @@ public class Labyrinthe {
     public static final char PJ = 'P';
     public static final char MONSTRE = 'M';
     public static final char VIDE = '.';
+    public static final char SORTIE = 'S';
 
     /**
      * constantes actions possibles
@@ -87,6 +88,7 @@ public class Labyrinthe {
     public void traitement(char caseDevant, String Direction) {
         switch (caseDevant) {
             case MUR:
+                //MainLaby.RechargerNiveau();
                 direction = Direction;
                 break;
 
@@ -96,6 +98,7 @@ public class Labyrinthe {
                 break;
 
             case MONSTRE:
+                //MainLaby.chargerProchainNiveau();
                 direction = Direction;
                 int[] suivante = getSuivant(pj.x, pj.y, direction);
                 for (Monstre monstre : monstres) {

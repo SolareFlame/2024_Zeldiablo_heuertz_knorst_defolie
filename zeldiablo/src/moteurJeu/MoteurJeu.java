@@ -251,5 +251,10 @@ public class MoteurJeu extends Application {
 
         // lance l'animation
         timer.start();
+        /** MUSIQUE A ENLEVER SI PROBLEME **/
+        /**
+         SoundLoader s = new SoundLoader();
+         s.playfirtsound();
+         **/
     }
 }

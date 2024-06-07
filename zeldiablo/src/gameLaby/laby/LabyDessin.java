@@ -71,25 +71,37 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
-
-
         /*
-        -------------------- PLAYER --------------------
+        -------------------- ENTITEE --------------------
          */
 
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
+        //MONSTRES DERRIERE LE JOUEUR
+        if (labyrinthe.getLabyrinthe().monstres != null) {
+            for (Monstre monstre : laby.monstres) {
+                double monstre_x = monstre.getX();
+                double monstre_y = monstre.getY();
+
+                //si les coordonnées Y du monstre sont plus petites que celles du joueur
+                if (monstre_y <= pj_y) {
+                    try {
+                        fillMonstre(gc, monstre_x, monstre_y);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+
+        //JOUEUR
         String direction = Labyrinthe.direction;
         String etat = "";
 
         if(LabyJeu.attackAppuye) {
             etat = "attack";
         }
-
-
-
-
 
         try {
             chargerEntite(gc, pj_x, pj_y, PJ, direction, etat);
@@ -99,23 +111,21 @@ public class LabyDessin implements DessinJeu {
         }
 
 
-        /*
-        -------------------- MONSTRES --------------------
-         */
+        //MONSTRES DEVANT LE JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
             for (Monstre monstre : laby.monstres) {
                 double monstre_x = monstre.getX();
                 double monstre_y = monstre.getY();
 
-                String direction_monstre = "gauche"; //temp
+                //si les coordonnées Y du monstre sont plus grandes que celles du joueur
+                if (monstre_y > pj_y) {
+                    String direction_monstre = "gauche"; //temp
 
-                try {
-                    gc.setFill(Color.RED);
-                    gc.fillRect(monstre_x * TAILLE, monstre_y * TAILLE, TAILLE, TAILLE);
-
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    try {
+                        fillMonstre(gc, monstre_x, monstre_y);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
@@ -220,6 +230,19 @@ public class LabyDessin implements DessinJeu {
     public void dessinerHitbox(GraphicsContext gc, double x, double y) {
         gc.setStroke(Color.RED);
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+    }
+
+
+
+
+
+    public void fillMonstre(GraphicsContext gc, double x, double y) {
+        gc.setFill(Color.RED);
+        gc.fillRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
+    }
+
+    public void fillPlayer(GraphicsContext gc, double x, double y) {
+
     }
 }
 

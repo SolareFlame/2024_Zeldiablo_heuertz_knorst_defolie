@@ -3,6 +3,7 @@ package moteurJeu;
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
 //import gameLaby.laby.SoundLoader;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -18,17 +19,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.media.MediaView;
-
-import java.io.File;
 
 // copied from: https://gist.github.com/james-d/8327842
 // and modified to use canvas drawing instead of shapes
@@ -255,10 +251,5 @@ public class MoteurJeu extends Application {
 
         // lance l'animation
         timer.start();
-        /** MUSIQUE A ENLEVER SI PROBLEME **/
-        /**
-        SoundLoader s = new SoundLoader();
-        s.playfirtsound();
-    **/
     }
 }

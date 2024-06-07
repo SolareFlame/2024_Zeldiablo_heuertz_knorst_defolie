@@ -2,7 +2,7 @@
 20
 XXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXX
-XX.......X....X...XX
+XX.......X..S.X...XX
 X.....M...X...X....X
 X........X...X.....X
 X..X.....X...X....XX

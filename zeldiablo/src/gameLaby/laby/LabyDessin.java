@@ -40,8 +40,8 @@ public class LabyDessin implements DessinJeu {
         gc.setFill(Color.GREEN);
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
-
-
+        gc.setFill(Color.PURPLE);
+        gc.fillRect(laby.sortie.getX(), laby.sortie.getY(), TAILLE, TAILLE);
 
 
         /*

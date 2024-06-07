@@ -42,6 +42,7 @@ public class Labyrinthe {
      */
     public Perso pj;
     public ArrayList<Monstre> monstres = new ArrayList<>();
+    public Sortie sortie;
 
     /**
      * les murs du labyrinthe
@@ -86,20 +87,17 @@ public class Labyrinthe {
     }
 
     public void traitement(char caseDevant, String Direction) {
+        direction = Direction;
         switch (caseDevant) {
             case MUR:
                 //MainLaby.RechargerNiveau();
-                direction = Direction;
                 break;
 
             case VIDE:
-                direction = Direction;
                 deplacerPerso(direction);
                 break;
 
             case MONSTRE:
-                //MainLaby.chargerProchainNiveau();
-                direction = Direction;
                 int[] suivante = getSuivant(pj.x, pj.y, direction);
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
@@ -110,6 +108,10 @@ public class Labyrinthe {
                         break;
                     }
                 }
+                break;
+
+            case SORTIE:
+                MainLaby.chargerProchainNiveau();
                 break;
 
             default:
@@ -172,6 +174,7 @@ public class Labyrinthe {
         this.murs = new boolean[nbColonnes][nbLignes];
         this.pj = null;
         this.random = new Random();
+        this.sortie = null;
 
         // lecture des cases
         String ligne = bfRead.readLine();
@@ -203,6 +206,12 @@ public class Labyrinthe {
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Monstre
                         this.monstres.add(new Monstre(colonne, numeroLigne));
+                        break;
+                    case SORTIE:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Monstre
+                        this.sortie = new Sortie(colonne, numeroLigne);
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);
@@ -276,7 +285,7 @@ public class Labyrinthe {
             String action = ACTIONS[random.nextInt(ACTIONS.length)];
             int[] suivante = getSuivant(monstre.x, monstre.y, action);
 
-            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
+            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1]) && (this.sortie.x != suivante[0] || this.sortie.y != suivante[1])) {
                 for (Monstre monstre2 : monstres) {
                     if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
                         return;

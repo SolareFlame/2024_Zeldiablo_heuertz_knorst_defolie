@@ -5,7 +5,7 @@ XXXXXXXXXXXXXXXXXXXX
 XX.......X........XX
 X.....M...X........X
 X........X...X.....X
-X..X.....X........XX
+X..X....SX........XX
 X......XXX.....M...X
 X...X....X.........X
 X..X..M.......X....X

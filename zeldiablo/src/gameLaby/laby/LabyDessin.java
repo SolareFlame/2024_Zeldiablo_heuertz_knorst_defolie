@@ -36,18 +36,22 @@ public class LabyDessin implements DessinJeu {
     final String LOUP_ALPHA = PATH + "loup_alpha/";
 
 
-
+    /**
+     * Méthode permettant de dessiner l'état du jeu dans le canvas
+     * @param jeu    jeu a afficher dans le canvas
+     * @param canvas canvas dans lequel dessiner l'etat du jeu
+     */
     @Override
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
-
-
+        // DONNES DU JEU
         LabyJeu labyrinthe = (LabyJeu) jeu;
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         Labyrinthe laby = labyrinthe.getLabyrinthe();
 
-         /*
+        /*
         -------- SOL --------
         */
+        // SOL
         gc.setFill(Color.rgb(20, 160, 46));
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
@@ -67,8 +71,6 @@ public class LabyDessin implements DessinJeu {
 
         gc.drawImage(img_enter, laby.entree.getX() * TAILLE + TAILLE / 2 - imgsize / 2, laby.entree.getY() * TAILLE + TAILLE - imgsize, imgsize, imgsize);
 
-
-
         /*
         -------- MURS --------
         */
@@ -87,24 +89,27 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- ENTITES --------
          */
+        //DONNES DU JOUEUR
         double pj_x = labyrinthe.getLabyrinthe().pj.getX();
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
-
-        if (labyrinthe.getLabyrinthe().monstres != null) {
-            chargerMonstres(gc, laby.monstres, pj_y, true);  // Pour les monstres au-dessus du joueur
-        }
 
         String direction = Labyrinthe.direction;
         String etat = LabyJeu.attackAppuye ? "attack" : "idle";
 
+        //MONSTRES AU DESSUS DU JOUEUR
+        if (labyrinthe.getLabyrinthe().monstres != null) {
+            chargerMonstres(gc, laby.monstres, pj_y, true);
+        }
+
+        //JOUEUR
         try {
-            String joueurId = "joueur";
-            chargerEntite(gc, pj_x, pj_y, PJ, direction, etat, joueurId);
+            chargerEntite(gc, pj_x, pj_y, PJ, direction, etat, "joueur");
             dessinerHitbox(gc, pj_x, pj_y);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        //MONSTRES EN DESSOUS DU JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
             chargerMonstres(gc, labyrinthe.getLabyrinthe().monstres, pj_y, false);
         }
@@ -112,8 +117,6 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- MURS TOP --------
          */
-
-
         gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
@@ -128,12 +131,23 @@ public class LabyDessin implements DessinJeu {
         }
     }
 
+
+    /**
+     * Charge une entité dans le canvas
+     * @param gc GraphicsContext (canvas)
+     * @param x position x de l'entité
+     * @param y position y de l'entité
+     * @param path chemin de l'image
+     * @param dir direction de l'entité ("" si pas de direction)
+     * @param etat état de l'entité (si non reconnu -> idle)
+     * @param entityId identifiant de l'entité
+     * @throws Exception si l'image n'est pas trouvée
+     */
     public void chargerEntite(GraphicsContext gc, double x, double y, String path, String dir, String etat, String entityId) throws Exception {
         int delay;
 
         // GERER L'ETAT DE L'ANIMATION
         AnimationState currentAnimation = animationStates.get(entityId);
-
         if (currentAnimation != null && (!currentAnimation.getEtat().equals(etat) || !currentAnimation.getDirection().equals(dir))) {
             animationStates.remove(entityId);
         }
@@ -152,6 +166,17 @@ public class LabyDessin implements DessinJeu {
         }
     }
 
+    /**
+     * Charge une animation dans le canvas
+     * @param gc GraphicsContext (canvas)
+     * @param x position x de l'entité
+     * @param y position y de l'entité
+     * @param path chemin de l'image
+     * @param dir direction de l'entité ("" si pas de direction)
+     * @param etat état de l'entité (si non reconnu -> idle)
+     * @param entityId identifiant de l'entité
+     * @throws Exception si l'image n'est pas trouvée
+     */
     public void chargerAnimation(GraphicsContext gc, double x, double y, String path, int delay, String entityId, String etat, String dir) throws Exception {
 
         // SI L'ANIMATION N'EXISTE PAS DANS LA MAP
@@ -204,11 +229,24 @@ public class LabyDessin implements DessinJeu {
         }
     }
 
+    /**
+     * Dessine la hitbox de l'entité (DEBUG)
+     * @param gc GraphicsContext (canvas)
+     * @param x position x de l'entité
+     * @param y position y de l'entité
+     */
     public void dessinerHitbox(GraphicsContext gc, double x, double y) {
         gc.setStroke(Color.RED);
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
     }
 
+    /**
+     * Charge les monstres dans le canvas
+     * @param gc GraphicsContext (canvas)
+     * @param monstres liste des monstres
+     * @param pj_y position y du joueur
+     * @param isAbove si les monstres sont au dessus du joueur
+     */
     private void chargerMonstres(GraphicsContext gc, ArrayList<Monstre> monstres, double pj_y, boolean isAbove) {
         for (Monstre monstre : monstres) {
             double monstre_x = monstre.getX();

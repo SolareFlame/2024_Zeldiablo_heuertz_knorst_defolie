@@ -84,16 +84,19 @@ public class Labyrinthe {
          return res;**/
     }
 
-    public void traitement(char caseDevant, String direction) {
+    public void traitement(char caseDevant, String Direction) {
         switch (caseDevant) {
             case MUR:
+                direction = Direction;
                 break;
 
             case VIDE:
+                direction = Direction;
                 deplacerPerso(direction);
                 break;
 
             case MONSTRE:
+                direction = Direction;
                 int[] suivante = getSuivant(pj.x, pj.y, direction);
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
@@ -229,8 +232,6 @@ public class Labyrinthe {
         this.pj.y = suivante[1];
 
         direction = action;
-
-
 
         deplacerMonstre();
     }

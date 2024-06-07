@@ -2,6 +2,7 @@ package moteurJeu;
 
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
+//import gameLaby.laby.SoundLoader;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.LongProperty;
@@ -14,7 +15,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.scene.media.MediaView;
+
+import java.io.File;
 
 // copied from: https://gist.github.com/james-d/8327842
 // and modified to use canvas drawing instead of shapes
@@ -89,7 +95,7 @@ public class MoteurJeu extends Application {
     /**
      * creation de l'application avec juste un canvas et des statistiques
      */
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception{
         // initialisation du canvas de dessin et du container
         final Canvas canvas = new Canvas();
         final Pane canvasContainer = new Pane(canvas);
@@ -105,10 +111,37 @@ public class MoteurJeu extends Application {
         root.setCenter(canvasContainer);
         root.setBottom(stats);
 
+
+
+        /**
+
+        // TODO Auto-generated method stub
+        //Initialising path of the media file, replace this with your file path
+        String path = "zeldiablo/ressources/sound/m3.mp3";
+
+        //Instantiating Media class
+        Media media = new Media(new File(path).toURI().toString());
+
+        //Instantiating MediaPlayer class
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+        //by setting this property to true, the audio will be played
+
+        MediaView mediaView = new MediaView(mediaPlayer);
+
+        root.getChildren().add(mediaView);
+        mediaPlayer.play();
+         **/
         // creation de la scene
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
+
+
+
+
 
 
         // listener clavier
@@ -186,5 +219,10 @@ public class MoteurJeu extends Application {
 
         // lance l'animation
         timer.start();
+        /** MUSIQUE A ENLEVER SI PROBLEME **/
+        /**
+        SoundLoader s = new SoundLoader();
+        s.playfirtsound();
+    **/
     }
 }

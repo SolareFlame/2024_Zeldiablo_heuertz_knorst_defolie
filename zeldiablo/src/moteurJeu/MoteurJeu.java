@@ -113,7 +113,7 @@ public class MoteurJeu extends Application {
 
 
 
-        /**
+        ///**
 
         // TODO Auto-generated method stub
         //Initialising path of the media file, replace this with your file path
@@ -131,7 +131,9 @@ public class MoteurJeu extends Application {
 
         root.getChildren().add(mediaView);
         mediaPlayer.play();
-         **/
+
+        //**/
+
         // creation de la scene
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);

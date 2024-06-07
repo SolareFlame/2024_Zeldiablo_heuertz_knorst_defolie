@@ -12,6 +12,7 @@ public class Perso {
      * position du personnage
      */
     int x, y;
+    int pv = 10;
 
     /**
      * constructeur
@@ -52,6 +53,17 @@ public class Perso {
 
     public void attaquer(Monstre monstre) {
         monstre.subirDegat();
+    }
+
+    public void subirDegat() {
+        if (pv > 0)
+            pv--;
+        else
+            throw new Error("Un personnage mort a ete attaque");
+    }
+
+    public boolean estMort() {
+        return pv == 0;
     }
 
     // ############################################

@@ -25,7 +25,7 @@ public class LabyDessin implements DessinJeu {
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
         final String PATH = "zeldiablo/ressources/textures/";
 
-        final String WALL = PATH + "wall/wall_rock_grass_midlarge.png";
+        final String WALL = PATH + "wall/wall_rock_midlarge.png";
 
         final String PJ = PATH + "pj/";
         final String MONSTRE = PATH + "monstre/";
@@ -41,7 +41,7 @@ public class LabyDessin implements DessinJeu {
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
         gc.setFill(Color.PURPLE);
-        gc.fillRect(laby.sortie.getX(), laby.sortie.getY(), TAILLE, TAILLE);
+        gc.fillRect(laby.sortie.getX()*TAILLE, laby.sortie.getY()*TAILLE, TAILLE, TAILLE);
 
 
         /*

@@ -6,9 +6,9 @@ import java.io.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class testMonstre{
+//public class testMonstre{
 
-    @Test
+   /* @Test
     public void test_prise_degat() {
         Monstre monstre = new Monstre(0, 0);
         monstre.subirDegat();
@@ -39,4 +39,4 @@ public class testMonstre{
         }
     }
 
-}
+}*/

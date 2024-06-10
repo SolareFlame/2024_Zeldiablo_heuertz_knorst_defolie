@@ -61,9 +61,7 @@ public class Labyrinthe {
 
     private Random random;
 
-    public char estDevant(String direction) {
-        int posX = pj.x;
-        int posY = pj.y;
+    public char estDevant(int posX, int posY, String direction) {
         switch (direction) {
             case HAUT:
                 posY--;
@@ -78,25 +76,32 @@ public class Labyrinthe {
                 posX--;
                 break;
             default:
+                System.out.println("LOG: (direction inconnue) '" + direction + "'");
                 throw new Error("action inconnue");
         }
+
+        // Vérifiez les limites
+        if (posX < 0 || posX >= getLength() || posY < 0 || posY >= getLengthY()) {
+            System.out.println("LOG: Hors des limites pour la position (" + posX + ", " + posY + ")");
+            return 'v';
+        }
+
         for (Monstre monstre : monstres) {
-            if (posX == monstre.x) {
-                if (posY == monstre.y)
-                    return MONSTRE;
+            if (posX == monstre.x && posY == monstre.y) {
+                return MONSTRE;
             }
         }
 
-        if (getMur(posX, posY))
+        if (getMur(posX, posY)) {
             return MUR;
-        if (posX == sortie.x && posY == sortie.y)
+        }
+        if (posX == sortie.x && posY == sortie.y) {
             return SORTIE;
-        else
+        } else {
             return VIDE;
-
-        /**int[] res = {x, y};
-         return res;**/
+        }
     }
+
 
     public void traitement(char caseDevant, String Direction) {
         direction = Direction;
@@ -250,7 +255,7 @@ public class Labyrinthe {
         bfRead.close();
 
     }
-    
+
     /**
      * le personnage se deplace de 2 cases
      * gere la collision avec les murs et les monstres
@@ -306,6 +311,29 @@ public class Labyrinthe {
     }
 
 
+
+    public char getCase(int x, int y) {
+        if (pj.x == x && pj.y == y) {
+            return PJ;
+        }
+        for (Monstre monstre : monstres) {
+            if (monstre.x == x && monstre.y == y) {
+                return MONSTRE;
+            }
+        }
+        if (sortie.x == x && sortie.y == y) {
+            return SORTIE;
+        }
+        if (entree.x == x && entree.y == y) {
+            return IDIOT;
+        }
+        if (murs[x][y]) {
+            return MUR;
+        }
+        return VIDE;
+    }
+
+
     // ##################################
     // GETTER
     // ##################################
@@ -338,4 +366,5 @@ public class Labyrinthe {
     public boolean getMur(int x, int y) {
         return this.murs[x][y];
     }
+
 }

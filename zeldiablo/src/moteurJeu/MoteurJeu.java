@@ -263,7 +263,6 @@ public class MoteurJeu extends Application {
                     // met a jour la date de derniere mise a jour
                     lastUpdateTime.set(timestamp);
                 }
-
             }
         };
 

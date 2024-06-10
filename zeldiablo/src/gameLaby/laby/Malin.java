@@ -14,7 +14,7 @@ public class Malin extends Monstre {
     public Malin(int dx, int dy, Labyrinthe laby) {
         super(dx, dy, laby);
         pv = 3;
-        name = "malin";
+        name = "Malin";
     }
 
     /**

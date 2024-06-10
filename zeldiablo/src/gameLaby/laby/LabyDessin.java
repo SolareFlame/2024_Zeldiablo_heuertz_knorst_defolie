@@ -29,10 +29,9 @@ public class LabyDessin implements DessinJeu {
     final String ENTER = PATH + "ground/enter.png";
 
     final String PJ = PATH + "pj/";
-    final String MONSTRE = PATH + "monstre/";
 
     final String LOUP_IDIOT = PATH + "loup_idiot/";
-    final String LOUP_NORMAL = PATH + "loup_normal/";
+    final String LOUP_MALIN = PATH + "loup_malin/";
     final String LOUP_ALPHA = PATH + "loup_alpha/";
 
 
@@ -129,7 +128,9 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
+        numCases(gc, laby);
     }
+
 
 
     /**
@@ -240,6 +241,25 @@ public class LabyDessin implements DessinJeu {
         gc.strokeRect(x * TAILLE, y * TAILLE, TAILLE, TAILLE);
     }
 
+
+    /**
+     * Numérote les cases du labyrinthe (DEBUG)
+     * @param gc GraphicsContext (canvas)
+     * @param laby Labyrinthe
+     */
+    public void numCases(GraphicsContext gc, Labyrinthe laby) {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < laby.getLength(); i++) {
+            for (int j = 0; j < laby.getLengthY(); j++) {
+                gc.fillText(i + "," + j, i * TAILLE + 5, j * TAILLE + 15);
+                gc.setStroke(Color.BLACK);
+                gc.strokeRect(i * TAILLE, j * TAILLE, TAILLE, TAILLE);
+            }
+        }
+
+
+    }
+
     /**
      * Charge les monstres dans le canvas
      * @param gc GraphicsContext (canvas)
@@ -252,18 +272,28 @@ public class LabyDessin implements DessinJeu {
             double monstre_x = monstre.getX();
             double monstre_y = monstre.getY();
 
+
+            String texture = "";
+
+            switch (monstre.name) {
+                case "Idiot":
+                    texture = LOUP_IDIOT;
+                    break;
+                case "Malin":
+                    texture = LOUP_MALIN;
+                    break;
+                case "Alpha":
+                    texture = LOUP_ALPHA;
+                    break;
+                default:
+                    System.out.println(monstre.name);
+                    throw new RuntimeException("Monstre non reconnu");
+            }
+
             if ((isAbove && monstre_y <= pj_y) || (!isAbove && monstre_y > pj_y)) {
                 try {
                     String monstreId = "monstre_" + monstre.hashCode();
-                    if (monstre.name == "Idiot"){
-                        chargerEntite(gc, monstre_x, monstre_y, LOUP_IDIOT, "", "", monstreId);
-                    }
-                    else if (monstre.name == "malin"){
-                        chargerEntite(gc, monstre_x, monstre_y, LOUP_NORMAL, "", "", monstreId);
-                    }
-                    else if (monstre.name == "alpha"){
-                        chargerEntite(gc, monstre_x, monstre_y, LOUP_ALPHA, "", "", monstreId);
-                    }
+                    chargerEntite(gc, monstre_x, monstre_y, texture, "", "", monstreId);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

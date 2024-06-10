@@ -36,6 +36,10 @@ public class LabyJeu implements Jeu {
      */
     @Override
     public void update(double deltaTime, Clavier clavier) {
+        int posX = labyrinthe.pj.x;
+        int posY = labyrinthe.pj.y;
+
+
         if(clavier.attack && !attackAppuye) {
             attackAppuye = true;
         }
@@ -44,19 +48,19 @@ public class LabyJeu implements Jeu {
             dashAppuye = true;
         }
         if (clavier.haut && !hautAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.HAUT), Labyrinthe.HAUT);
+            labyrinthe.traitement(labyrinthe.estDevant(posX, posY, Labyrinthe.HAUT), Labyrinthe.HAUT);
             hautAppuye = true;
         }
         if (clavier.bas && !basAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.BAS), Labyrinthe.BAS);
+            labyrinthe.traitement(labyrinthe.estDevant(posX, posY, Labyrinthe.BAS), Labyrinthe.BAS);
             basAppuye = true;
         }
         if (clavier.gauche && !gaucheAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.GAUCHE), Labyrinthe.GAUCHE);
+            labyrinthe.traitement(labyrinthe.estDevant(posX, posY, Labyrinthe.GAUCHE), Labyrinthe.GAUCHE);
             gaucheAppuye = true;
         }
         if (clavier.droite && !droiteAppuye) {
-            labyrinthe.traitement(labyrinthe.estDevant(Labyrinthe.DROITE), Labyrinthe.DROITE);
+            labyrinthe.traitement(labyrinthe.estDevant(posX, posY, Labyrinthe.DROITE), Labyrinthe.DROITE);
             droiteAppuye = true;
         }
 
@@ -84,7 +88,7 @@ public class LabyJeu implements Jeu {
 
     @Override
     public void init() {
-//pas besoin
+        //pas besoin
     }
 
     @Override

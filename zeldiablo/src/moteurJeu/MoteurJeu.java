@@ -24,9 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -119,8 +116,10 @@ public class MoteurJeu extends Application {
         final BorderPane root = new BorderPane();
         root.setBottom(stats);
         VBox vb = new VBox();
-        Text t = new Text("OTTER GAME");
-        t.setFont(Font.font("verdana",  FontWeight.BOLD, FontPosture.REGULAR, 60));
+        FileInputStream input = new FileInputStream("zeldiablo/ressources/textures/menu/Name.png");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+
 
         FileInputStream input1 = new FileInputStream("zeldiablo/ressources/textures/menu/Otter.jpg");
         Image image1 = new Image(input1);
@@ -139,7 +138,7 @@ public class MoteurJeu extends Application {
         Button bquit = new Button("Quit");
         bquit.setMinHeight(40);
         bquit.setMinWidth(175);
-        vb.getChildren().addAll(t,bplay,bquit);
+        vb.getChildren().addAll(imageView,bplay,bquit);
         vb.setSpacing(50);
         root.setCenter(p);
         vb.setAlignment(Pos.CENTER);

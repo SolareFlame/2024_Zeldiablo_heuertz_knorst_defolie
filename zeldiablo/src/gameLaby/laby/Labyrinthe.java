@@ -254,9 +254,11 @@ public class Labyrinthe {
         bfRead.close();
 
     }
-
-
-
+    
+    /**
+     * le personnage se deplace de 2 cases
+     * gere la collision avec les murs et les monstres
+     */
     public void dashDe2Cases() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastDashTime >= DASH_COOLDOWN) {

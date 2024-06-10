@@ -1,0 +1,121 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype polyline
+
+class Alpha {
+  + Alpha(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class AnimationState {
+  + AnimationState(ArrayList<Image>, String, String): 
+  - frameCounter: int
+  - etat: String
+  - direction: String
+  - animationEnCours: boolean
+  - images: ArrayList<Image>
+  + addFrameCounter(): void
+  + stopAnimation(): void
+  + startAnimation(): void
+   frameCounter: int
+   etat: String
+   animationEnCours: boolean
+   direction: String
+   images: ArrayList<Image>
+}
+class Entite {
+  + Entite(int, int): 
+  # x: int
+  # y: int
+  + etrePresent(int, int): boolean
+   x: int
+   y: int
+}
+class Entree {
+  + Entree(int, int): 
+}
+interface IA << interface >> {
+  + seDeplacer(): void
+}
+class Idiot {
+  + Idiot(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class LabyDessin {
+  + LabyDessin(): 
+  + chargerAnimation(GraphicsContext, double, double, String, int, String, String, String): void
+  + dessinerHitbox(GraphicsContext, double, double): void
+  + dessinerJeu(Jeu, Canvas): void
+  - chargerMonstres(GraphicsContext, ArrayList<Monstre>, double, boolean): void
+  + chargerEntite(GraphicsContext, double, double, String, String, String, String): void
+}
+class LabyJeu {
+  + LabyJeu(String): 
+  - labyrinthe: Labyrinthe
+  + init(): void
+  + etreFini(): boolean
+  + update(double, Clavier): void
+   labyrinthe: Labyrinthe
+}
+class Labyrinthe {
+  + Labyrinthe(String): 
+  + traitement(char, String): void
+  ~ getSuivant(int, int, String): int[]
+  + etreFini(): boolean
+  + dashDe2Cases(): void
+  + etatNiveau(): void
+  + deplacerMonstres(): void
+  + getMur(int, int): boolean
+  + estMonstre(int, int): boolean
+  + estDevant(String): char
+   lengthY: int
+   length: int
+}
+class MainLaby {
+  + MainLaby(): 
+  + chargerProchainNiveau(): void
+  + RechargerNiveau(): void
+  + main(String[]): void
+}
+class Malin {
+  + Malin(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class Monstre {
+  + Monstre(int, int, Labyrinthe): 
+  # pv: int
+  + seDeplacer(): void
+  + subirDegat(): void
+  + attaquer(Perso): void
+   pv: int
+}
+class Perso {
+  + Perso(int, int): 
+  + deplacerPerso(String): void
+  + etrePresent(int, int): boolean
+  + estMort(): boolean
+  + subirDegat(): void
+  + attaquer(Monstre): void
+}
+class Sortie {
+  + Sortie(int, int): 
+}
+
+Alpha           -[#000082,plain]-^  Monstre        
+Entree          -[#000082,plain]-^  Entite         
+Idiot           -[#000082,plain]-^  Monstre        
+LabyDessin     "1" *-[#595959,plain]-> "animationStates\n*" AnimationState 
+LabyJeu        "1" *-[#595959,plain]-> "labyrinthe\n1" Labyrinthe     
+Labyrinthe     "1" *-[#595959,plain]-> "entree\n1" Entree         
+Labyrinthe     "1" *-[#595959,plain]-> "monstres\n*" Monstre        
+Labyrinthe     "1" *-[#595959,plain]-> "pj\n1" Perso          
+Labyrinthe     "1" *-[#595959,plain]-> "sortie\n1" Sortie         
+MainLaby       "1" *-[#595959,plain]-> "jeu\n1" LabyJeu        
+Malin           -[#000082,plain]-^  Monstre        
+Monstre         -[#000082,plain]-^  Entite         
+Monstre         -[#008200,dashed]-^  IA             
+Monstre        "1" *-[#595959,plain]-> "laby\n1" Labyrinthe     
+Perso           -[#000082,plain]-^  Entite         
+Sortie          -[#000082,plain]-^  Entite         
+@enduml

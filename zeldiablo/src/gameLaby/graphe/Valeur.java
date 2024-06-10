@@ -97,7 +97,7 @@ public class Valeur {
         ArrayList<String> res = new ArrayList<>();
 
         while (des != null) {
-            res.addFirst(des);
+            res.add(0, des);
             des = this.parent.get(des);
         }
         return res;

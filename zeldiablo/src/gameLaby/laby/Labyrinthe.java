@@ -109,8 +109,6 @@ public class Labyrinthe {
                 for (Monstre monstre : monstres) {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
                         pj.attaquer(monstre);
-                        if (monstre.getPv() == 0)
-                            monstres.remove(monstre);
                         deplacerMonstres();
                         etatNiveau();
                         break;

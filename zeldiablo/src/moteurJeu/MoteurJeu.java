@@ -15,16 +15,21 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
 
 // copied from: https://gist.github.com/james-d/8327842
 // and modified to use canvas drawing instead of shapes
@@ -116,15 +121,27 @@ public class MoteurJeu extends Application {
         VBox vb = new VBox();
         Text t = new Text("OTTER GAME");
         t.setFont(Font.font("verdana",  FontWeight.BOLD, FontPosture.REGULAR, 60));
-        Button bplay = new Button("Play");
+
+        FileInputStream input1 = new FileInputStream("zeldiablo/ressources/textures/menu/Otter.jpg");
+        Image image1 = new Image(input1);
+        ImageView imageView1 = new ImageView(image1);
+
+        StackPane p = new StackPane(imageView1,vb);
+
+        FileInputStream input2 = new FileInputStream("zeldiablo/ressources/textures/menu/PlayButtonIcon.png");
+        Image image2 = new Image(input2);
+        ImageView imageView2 = new ImageView(image2);
+        Button bplay = new Button("Play", imageView2);
         bplay.setMinHeight(40);
-        bplay.setMinWidth(175);
+        bplay.setMinWidth(225);
+        bplay.setFont(Font.font(40));
+        bplay.setGraphicTextGap(30);
         Button bquit = new Button("Quit");
         bquit.setMinHeight(40);
         bquit.setMinWidth(175);
         vb.getChildren().addAll(t,bplay,bquit);
         vb.setSpacing(50);
-        root.setCenter(vb);
+        root.setCenter(p);
         vb.setAlignment(Pos.CENTER);
 
 

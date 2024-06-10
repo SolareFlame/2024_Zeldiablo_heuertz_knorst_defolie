@@ -51,8 +51,14 @@ public class Perso extends Entite{
     }
 
     public void subirDegat() {
-        if (pv > 0)
+        if (pv > 0) {
             pv--;
+            if (pv == 0) {
+                System.out.println("Loutre a succombé");
+            } else {
+                System.out.println("PV restant de la loutre : " + pv);
+            }
+        }
         else
             throw new Error("Un personnage mort a ete attaque");
     }

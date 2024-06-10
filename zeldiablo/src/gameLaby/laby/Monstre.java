@@ -1,5 +1,7 @@
 package gameLaby.laby;
 
+import java.util.Locale;
+
 /**
  * Classe representant le monstre dans le labyrinthe
  */
@@ -9,7 +11,7 @@ public abstract class Monstre extends Entite implements IA{
     protected Labyrinthe laby;
     protected String name;
 
-    // LABYRINTHE EN PARALETRE CONSTRUCTEUR = JUSTE UNE REFERENCE MAIS CONNAISSANCE ENTIERETE LABYRINTHE
+    // LABYRINTHE EN PARAMETRE CONSTRUCTEUR = JUSTE UNE REFERENCE MAIS CONNAISSANCE ENTIERETE LABYRINTHE
     /**
      * Constructeur du monstre
      *
@@ -25,8 +27,13 @@ public abstract class Monstre extends Entite implements IA{
 
     public void subirDegat() {
         if (pv > 0) {
-            System.out.println("PV restant au monstre " + name + " : " + this.getPv());
             pv--;
+            if (pv == 0) {
+                System.out.println("Monstre " + name + " éliminé");
+                laby.monstres.remove(this);
+            } else {
+                System.out.println("PV restant au monstre " + name.toLowerCase() + " : " + this.getPv());
+            }
         } else
             throw new Error("Un monstre mort a ete attaque");
     }

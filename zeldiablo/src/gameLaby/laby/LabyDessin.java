@@ -255,7 +255,15 @@ public class LabyDessin implements DessinJeu {
             if ((isAbove && monstre_y <= pj_y) || (!isAbove && monstre_y > pj_y)) {
                 try {
                     String monstreId = "monstre_" + monstre.hashCode();
-                    chargerEntite(gc, monstre_x, monstre_y, LOUP_ALPHA, "", "", monstreId);
+                    if (monstre.name == "Idiot"){
+                        chargerEntite(gc, monstre_x, monstre_y, LOUP_IDIOT, "", "", monstreId);
+                    }
+                    else if (monstre.name == "malin"){
+                        chargerEntite(gc, monstre_x, monstre_y, LOUP_NORMAL, "", "", monstreId);
+                    }
+                    else if (monstre.name == "alpha"){
+                        chargerEntite(gc, monstre_x, monstre_y, LOUP_ALPHA, "", "", monstreId);
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

@@ -53,6 +53,12 @@ public class Labyrinthe {
      */
     public boolean[][] murs;
 
+    /**
+     * attributs pour le dash
+     */
+    private long lastDashTime = 0;
+    private static final long DASH_COOLDOWN = 3000;
+
     private Random random;
 
     public char estDevant(String direction) {
@@ -60,7 +66,7 @@ public class Labyrinthe {
         int posY = pj.y;
         switch (direction) {
             case HAUT:
-                posY --;
+                posY--;
                 break;
             case BAS:
                 posY++;
@@ -74,7 +80,7 @@ public class Labyrinthe {
             default:
                 throw new Error("action inconnue");
         }
-        for(Monstre monstre : monstres) {
+        for (Monstre monstre : monstres) {
             if (posX == monstre.x) {
                 if (posY == monstre.y)
                     return MONSTRE;
@@ -249,25 +255,28 @@ public class Labyrinthe {
 
     }
 
-    /**
-     * deplace le personnage de deux cases
-     */
+
+
     public void dashDe2Cases() {
-        int[] suivante = getSuivant(pj.x, pj.y, direction);
-        int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastDashTime >= DASH_COOLDOWN) {
+            int[] suivante = getSuivant(pj.x, pj.y, direction);
+            int[] suivante2 = getSuivant(suivante[0], suivante[1], direction);
 
-        // si la case suivante n'est pas un mur et qu'il n'y a pas de monstre
-        if (!this.murs[suivante[0]][suivante[1]] && !estMonstre(suivante[0], suivante[1])) {
-            pj.x = suivante[0];
-            pj.y = suivante[1];
+            // si la case suivante n'est pas un mur et qu'il n'y a pas de monstre
+            if (!this.murs[suivante[0]][suivante[1]] && !estMonstre(suivante[0], suivante[1])) {
+                pj.x = suivante[0];
+                pj.y = suivante[1];
 
-            // si la case suivante de la case suivante n'est pas un mur et qu'il n'y a pas de monstre
-            if (!this.murs[suivante2[0]][suivante2[1]] && !estMonstre(suivante2[0], suivante2[1])) {
-                pj.x = suivante2[0];
-                pj.y = suivante2[1];
+                // si la case suivante de la case suivante n'est pas un mur et qu'il n'y a pas de monstre
+                if (!this.murs[suivante2[0]][suivante2[1]] && !estMonstre(suivante2[0], suivante2[1])) {
+                    pj.x = suivante2[0];
+                    pj.y = suivante2[1];
+                }
             }
+            deplacerMonstres();
+            lastDashTime = currentTime;
         }
-        deplacerMonstres();
     }
 
     /**
@@ -291,7 +300,6 @@ public class Labyrinthe {
 
 
     /**
-     *
      * @return fin du jeu
      */
     public boolean etreFini() {
@@ -300,9 +308,9 @@ public class Labyrinthe {
     }
 
     public void etatNiveau() {
-        if (pj.pv == 0){
+        if (pj.pv == 0) {
             MainLaby.RechargerNiveau();
-            }
+        }
     }
 
     // ##################################
@@ -329,6 +337,7 @@ public class Labyrinthe {
 
     /**
      * return mur en (i,j)
+     *
      * @param x
      * @param y
      * @return

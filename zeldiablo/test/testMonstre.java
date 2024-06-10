@@ -8,9 +8,9 @@ import java.io.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//public class testMonstre{
+public class testMonstre{
 
-   /* @Test
+    @Test
     public void test_prise_degat() {
         try {
             Labyrinthe laby = new Labyrinthe("zeldiablo/test/labytest0.txt");
@@ -57,4 +57,4 @@ import static org.junit.jupiter.api.Assertions.*;
         }
     }
 
-}*/
+}

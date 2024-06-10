@@ -107,7 +107,6 @@ public class Labyrinthe {
             case VIDE:
                 pj.deplacerPerso(direction);
                 deplacerMonstres();
-                etatNiveau();
                 break;
 
             case MONSTRE:
@@ -116,7 +115,6 @@ public class Labyrinthe {
                     if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
                         pj.attaquer(monstre);
                         deplacerMonstres();
-                        etatNiveau();
                         break;
                     }
                 }
@@ -307,11 +305,6 @@ public class Labyrinthe {
         return false;
     }
 
-    public void etatNiveau() {
-        if (pj.pv == 0) {
-            MainLaby.RechargerNiveau();
-        }
-    }
 
     // ##################################
     // GETTER

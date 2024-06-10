@@ -54,7 +54,7 @@ public class Perso extends Entite{
         if (pv > 0) {
             pv--;
             if (pv == 0) {
-                System.out.println("Loutre a succombé");
+                mort();
             } else {
                 System.out.println("PV restant de la loutre : " + pv);
             }
@@ -65,6 +65,11 @@ public class Perso extends Entite{
 
     public boolean estMort() {
         return pv == 0;
+    }
+
+    private void mort() {
+        System.out.println("Loutre a succombé");
+        MainLaby.RechargerNiveau();
     }
 
     // ############################################

@@ -30,17 +30,14 @@ public class Idiot extends Monstre {
         String action = this.laby.ACTIONS[random.nextInt(laby.ACTIONS.length)];
         int[] suivante = laby.getSuivant(this.x, this.y, action);
 
-        if (!laby.murs[suivante[0]][suivante[1]] && (laby.pj.x != suivante[0] || laby.pj.y != suivante[1])) {
-            for (Monstre monstre2 : laby.monstres) {
-                if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                    return;
-                }
+        if (!laby.murs[suivante[0]][suivante[1]] && !laby.estMonstre(suivante[0], suivante[1])) {
+            if (laby.pj.etrePresent(suivante[0], suivante[1])) {
+                attaquer(laby.pj);
+            } else {
+                this.x = suivante[0];
+                this.y = suivante[1];
             }
-            this.x = suivante[0];
-            this.y = suivante[1];
-
-            }
+        }
     }
-
 
 }

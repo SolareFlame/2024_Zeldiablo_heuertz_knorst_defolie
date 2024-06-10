@@ -183,12 +183,12 @@ public class LabyDessin implements DessinJeu {
         if (!animationStates.containsKey(entityId)) {
             ArrayList<Image> images = new ArrayList<>();
             File folder = new File(path);
-            System.out.println("Chemin du dossier: " + folder.getAbsolutePath());
+            //System.out.println("Chemin du dossier: " + folder.getAbsolutePath());
             File[] listOfFiles = folder.listFiles();
 
             if (listOfFiles != null) {
                 for (File file : listOfFiles) {
-                    System.out.println("-> " + file.getName());
+                    //System.out.println("-> " + file.getName());
                     if (file.isFile()) {
                         String abs_path = file.getAbsolutePath();
                         Image img = new Image(abs_path);

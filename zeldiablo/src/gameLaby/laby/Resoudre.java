@@ -91,11 +91,16 @@ public class Resoudre {
      */
     public int[] resoudre(int ax, int ay, int px, int py) {
         if (g == null) {
-            throw new IllegalStateException("Graphe non initialisé. Appelez updateGraphe avant resoudre.");
+            throw new IllegalStateException("Graphe non initialisé.");
         }
 
         String depart = "[" + ax + "," + ay + "]";
         String arrivee = "[" + px + "," + py + "]";
+
+        if (!g.listeNoeuds().contains(depart) || !g.listeNoeuds().contains(arrivee)) {
+            //System.out.println("Le noeud de départ ou d'arrivée n'existe pas dans le graphe.");
+            return null; // Le monstre ne bouge pas
+        }
 
         Valeur v = new Valeur();
         PriorityQueue<String> Q = new PriorityQueue<>(Comparator.comparingDouble(v::getValeur));

@@ -4,6 +4,8 @@ package moteurJeu;
 
 //import gameLaby.laby.SoundLoader;
 
+import gameLaby.laby.LabyDessin;
+import gameLaby.laby.LabyJeu;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -172,14 +174,6 @@ public class MoteurJeu extends Application {
         primaryStage.show();
 
 
-
-
-
-
-
-
-
-
         // listener clavier
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -212,7 +206,7 @@ public class MoteurJeu extends Application {
             public void handle(MouseEvent mouseEvent) {
                 vb.getChildren().remove(bplay);
                 root.setCenter(canvasContainer);
-                startAnimation(canvas);
+                startAnimation(canvas, primaryStage);
             }
         });
 
@@ -230,7 +224,7 @@ public class MoteurJeu extends Application {
      *
      * @param canvas le canvas sur lequel on est synchronise
      */
-    private void startAnimation(final Canvas canvas) {
+    private void startAnimation(final Canvas canvas, Stage primaryStage) {
         // stocke la derniere mise e jour
         final LongProperty lastUpdateTime = new SimpleLongProperty(0);
 
@@ -251,11 +245,17 @@ public class MoteurJeu extends Application {
 
                 // si le temps ecoule depasse le necessaire pour FPS souhaite
                 if (dureeEnMilliSecondes > dureeFPS) {
+                    LabyJeu lb_jeu = (LabyJeu) jeu;
+                    LabyDessin dessin = (LabyDessin) MoteurJeu.dessin;
+
+                    primaryStage.setHeight(lb_jeu.getLabyrinthe().getLengthY() * dessin.TAILLE);
+
                     // met a jour le jeu en passant les touches appuyees
                     jeu.update(dureeEnMilliSecondes / 1_000., controle);
 
                     // dessine le jeu
                     dessin.dessinerJeu(jeu, canvas);
+
 
                     // ajoute la duree dans les statistiques
                     frameStats.addFrame(elapsedTime);

@@ -117,13 +117,15 @@ public class Labyrinthe {
         }
         for (Porte porte : portes) {
             if (porte.etrePresent(posX, posY)) {
-                    if (porte.type == 0) {  // porte à clef
+                if (porte.estOuverte()) {
+                    return VIDE;
+                } else {
+                    if (porte.type == 0) {
                         return PORTE_CLE;
-                    } else if (porte.type == 1) {  // porte à mécanisme
-                        return PORTE_MECA;
                     } else {
-                        throw new Error("Type de porte inconnu");
+                        return PORTE_MECA;
                     }
+                }
             }
         }
         if (plaque != null && plaque.etrePresent(posX, posY)) {
@@ -343,18 +345,18 @@ public class Labyrinthe {
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
                         if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
-                            this.portes.add(new Porte(colonne, numeroLigne, 0, true));
-                        else
                             this.portes.add(new Porte(colonne, numeroLigne, 0, false));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 0, true));
                         break;
                     case PORTE_MECA:  // porte à mécanisme
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
                         if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
-                            this.portes.add(new Porte(colonne, numeroLigne, 1, true));
-                        else
                             this.portes.add(new Porte(colonne, numeroLigne, 1, false));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 1, true));
                         break;
                     case CLE:
                         // pas de mur

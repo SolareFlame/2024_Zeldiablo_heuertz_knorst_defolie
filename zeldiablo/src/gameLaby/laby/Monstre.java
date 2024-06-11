@@ -10,6 +10,7 @@ public abstract class Monstre extends Entite implements IA{
     protected int pv;
     protected Labyrinthe laby;
     protected String name;
+    boolean estAttaque = false;
 
     // LABYRINTHE EN PARAMETRE CONSTRUCTEUR = JUSTE UNE REFERENCE MAIS CONNAISSANCE ENTIERETE LABYRINTHE
     /**
@@ -34,6 +35,7 @@ public abstract class Monstre extends Entite implements IA{
     public void subirDegat() {
         if (pv > 0) {
             pv--;
+            estAttaque = true;
             if (pv == 0) {
                 System.out.println("Monstre " + name + " éliminé");
                 laby.monstres.remove(this);

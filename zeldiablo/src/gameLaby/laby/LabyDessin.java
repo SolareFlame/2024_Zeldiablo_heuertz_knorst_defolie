@@ -128,8 +128,30 @@ public class LabyDessin implements DessinJeu {
                 }
             }
         }
-        numCases(gc, laby);
+        //numCases(gc, laby);
+
+        // PORTE
+        gc.setFill(Color.rgb(170, 20, 120));
+
+        for (Porte portes : laby.portes) {
+            gc.fillRect(portes.getX() * TAILLE, portes.getY() * TAILLE, TAILLE, TAILLE);
+        }
+
+        // plaque
+        gc.setFill(Color.rgb(74, 200, 140));
+        if (laby.plaque != null)
+            gc.fillRect(laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
+
+        // clé
+        gc.setFill(Color.rgb(159, 74, 26));
+        if (laby.cle != null)
+            gc.fillRect(laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
     }
+
+
+
+
+
 
 
 

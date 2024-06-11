@@ -25,6 +25,10 @@ public class Labyrinthe {
     public static final char IDIOT = '1';
     public static final char MALIN = '2';
     public static final char ALPHA = '3';
+    public static final char PORTE_CLE = '9';
+    public static final char PORTE_MECA = '8';
+    public static final char CLE = 'K';
+    public static final char PLAQUE = 'Q';
 
     /**
      * constantes actions possibles
@@ -47,11 +51,15 @@ public class Labyrinthe {
     public ArrayList<Monstre> monstres = new ArrayList<>();
     public Sortie sortie;
     public Entree entree;
+    public ArrayList<Porte> portes = new ArrayList<>();
+    public Cle cle;
+    public Plaque plaque;
 
     /**
      * les murs du labyrinthe
      */
     public boolean[][] murs;
+    //public boolean[][] murs_secret;
 
     /**
      * attributs pour le dash
@@ -95,15 +103,35 @@ public class Labyrinthe {
         if (getMur(posX, posY)) {
             return MUR;
         }
-        if (posX == sortie.x && posY == sortie.y) {
+        if (sortie.etrePresent(posX, posY)) {
             return SORTIE;
-        } else {
+        }
+        if (cle != null && cle.etrePresent(posX, posY)) {
+            return CLE;
+        }
+
+        for (Porte porte : portes) {
+            if (porte.etrePresent(posX, posY)) {
+                    if (porte.type == 0) {  // porte à clef
+                        return PORTE_CLE;
+                    } else if (porte.type == 1) {  // porte à mécanisme
+                        return PORTE_MECA;
+                    } else {
+                        throw new Error("Type de porte inconnu");
+                    }
+            }
+        }
+        if (plaque != null && plaque.etrePresent(posX, posY)) {
+            return PLAQUE;
+        }
+        else {
             return VIDE;
         }
     }
 
 
     public void traitement(char caseDevant, String Direction) {
+        System.out.println("LOG: caseDestination = " + caseDevant);
         direction = Direction;
         switch (caseDevant) {
             case MUR:
@@ -129,8 +157,60 @@ public class Labyrinthe {
                 MainLaby.chargerProchainNiveau();
                 break;
 
+            case PORTE_CLE:
+            case PORTE_MECA:
+                int[] suivante1 = getSuivant(pj.x, pj.y, direction);
+                for (Porte porte : portes) {
+                    if (porte.etrePresent(suivante1[0], suivante1[1])) {
+                        if (porte.estOuverte()) {
+                            pj.deplacerPerso(direction);
+                            deplacerMonstres();
+                        } else {
+                            if (porte.type == 0) {  // porte à clef
+                                if (cle.estRamasse()) {
+                                    porte.ouvrir();
+                                    pj.deplacerPerso(direction);
+                                    deplacerMonstres();
+                                }
+                                else {
+                                    System.out.println("Porte à clef fermée");
+                                }
+                            } else {
+                                System.out.println("Porte à mécanisme fermée");
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case CLE:
+                pj.deplacerPerso(direction);
+                cle.ramasser();
+                deplacerMonstres();
+                break;
+
+            case PLAQUE:
+                plaque.changerEtat();
+                ChangerEtatPorte();
+                pj.deplacerPerso(direction);
+                deplacerMonstres();
+                break;
+
             default:
                 throw new Error("case inconnue");
+        }
+        System.out.println("LOG: case arrivé = " + estDevant(pj.x, pj.y, direction));
+    }
+
+    public void ChangerEtatPorte() {
+        for (Porte porte : portes) {
+            if (porte.type == 1) {
+                if (plaque.estActivee()) {
+                    porte.ouvrir();
+                } else {
+                    porte.fermer();
+                }
+            }
         }
     }
 
@@ -238,8 +318,38 @@ public class Labyrinthe {
                     case SORTIE:
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
-                        // ajoute Monstre
+                        // ajoute Sortie
                         this.sortie = new Sortie(colonne, numeroLigne);
+                        break;
+                    case '9':  // porte à clef
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Porte
+                        if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
+                            this.portes.add(new Porte(colonne, numeroLigne, 0, true));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 0, false));
+                        break;
+                    case '8':  // porte à mécanisme
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Porte
+                        if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
+                            this.portes.add(new Porte(colonne, numeroLigne, 1, true));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 1, false));
+                        break;
+                    case CLE:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Cle
+                        this.cle = new Cle(colonne, numeroLigne);
+                        break;
+                    case PLAQUE:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Plaque
+                        this.plaque = new Plaque(colonne, numeroLigne);
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);

@@ -28,6 +28,7 @@ public class LabyDessin implements DessinJeu {
 
     final String WALL = PATH + "wall/wall_rock_grass_midlarge.png";
     final String EXIT = PATH + "ground/exit.png";
+    final String KEY = PATH + "ground/key.png";
     final String ENTER = PATH + "ground/enter.png";
 
     final String PJ = PATH + "pj/";
@@ -35,6 +36,8 @@ public class LabyDessin implements DessinJeu {
     final String LOUP_IDIOT = PATH + "loup_idiot/";
     final String LOUP_MALIN = PATH + "loup_malin/";
     final String LOUP_ALPHA = PATH + "loup_alpha/";
+
+    final LabyEffect labyEffect = new LabyEffect();
 
 
     /**
@@ -53,8 +56,29 @@ public class LabyDessin implements DessinJeu {
         -------- SOL --------
         */
         // SOL
-        gc.setFill(rgb(20, 160, 46));
+        gc.setFill(Color.rgb(20, 160, 46));
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
+
+        // plaque
+        if (laby.plaque != null) {
+            String plaque = PATH + "ground/button_notactive.png";
+            if (laby.plaque.active) plaque = PATH + "ground/button_active.png";
+
+            File imgf_plaque = new File(plaque);
+            String abs_plaque = imgf_plaque.getAbsolutePath();
+            Image img_plaque = new Image(abs_plaque);
+
+            gc.drawImage(img_plaque, laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
+        }
+
+        // clé
+        if (laby.cle != null) {
+            File imgf_key = new File(KEY);
+            String abs_key = imgf_key.getAbsolutePath();
+            Image img_key = new Image(abs_key);
+
+            gc.drawImage(img_key, laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
+        }
 
         //SORTIE
         File imgf_exit = new File(EXIT);
@@ -87,6 +111,33 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
+        // PORTE
+        for (Porte porte : laby.portes) {
+            String porte_path = PATH + "door/";
+            int etirement_horizontal = 1;
+            int decalage_horizontal = 0;
+
+            if(porte.type == 0) porte_path += "key/"; // 0 = key
+            else porte_path += "mechanical/"; // 1 = mechanical
+
+            if(porte.vertical) {
+                porte_path += "vertical/";
+                etirement_horizontal = 2;
+                decalage_horizontal = TAILLE;
+                }
+            else porte_path += "horizontal/";
+
+            if(porte.estOuverte()) porte_path += "open.png";
+            else porte_path += "close.png";
+
+            File imgf_porte = new File(porte_path);
+            String abs_porte = imgf_porte.getAbsolutePath();
+            Image img_porte = new Image(abs_porte);
+
+            gc.drawImage(img_porte, porte.getX() * TAILLE - decalage_horizontal, porte.getY() * TAILLE - TAILLE, TAILLE * etirement_horizontal, TAILLE*2);
+        }
+
+
         /*
         -------- ENTITES --------
          */
@@ -118,7 +169,7 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- MURS TOP --------
          */
-        gc.setFill(rgb(25, 22, 20));
+        gc.setFill(Color.rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
@@ -132,23 +183,29 @@ public class LabyDessin implements DessinJeu {
         }
         //numCases(gc, laby);
 
-        // PORTE
-        gc.setFill(rgb(170, 20, 120));
-
-        for (Porte portes : laby.portes) {
-            gc.fillRect(portes.getX() * TAILLE, portes.getY() * TAILLE, TAILLE, TAILLE);
+        if(laby.pj.estAttaque){
+            try {
+                labyEffect.dessinerEffet(gc, "claw", laby.pj.x, laby.pj.y, 2); // Dessine l'effet
+                if(!labyEffect.animationEnCours){
+                    laby.pj.estAttaque = false;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        // plaque
-        gc.setFill(rgb(74, 200, 140));
-        if (laby.plaque != null)
-            gc.fillRect(laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
-
-        // clé
-        gc.setFill(rgb(159, 74, 26));
-        if (laby.cle != null)
-            gc.fillRect(laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
-
+        for (Monstre monstre : laby.monstres) {
+            if(monstre.estAttaque){
+                try {
+                    labyEffect.dessinerEffet(gc, "hit", monstre.x, monstre.y, 2); // Dessine l'effet
+                    if(!labyEffect.animationEnCours){
+                        monstre.estAttaque = false;
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         // vie
         chargerVie(gc, laby);
 

@@ -13,6 +13,7 @@ public class Perso extends Entite{
     int pv = 10;
     private String arme = "baton";
     private final String[] arme_possible = {"baton", "katana"};
+    boolean estAttaque = false;
 
     /**
      * Constructeur de l'entité
@@ -93,6 +94,7 @@ public class Perso extends Entite{
 
     public void subirDegat() {
         if (pv > 0) {
+            estAttaque = true;
             pv--;
             if (pv == 0) {
                 mort();

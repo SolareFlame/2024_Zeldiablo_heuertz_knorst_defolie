@@ -29,6 +29,7 @@ public class Labyrinthe {
     public static final char PORTE_MECA = '8';
     public static final char CLE = 'K';
     public static final char PLAQUE = 'Q';
+    public static final char KATANA = '$';
 
     /**
      * constantes actions possibles
@@ -54,6 +55,7 @@ public class Labyrinthe {
     public ArrayList<Porte> portes = new ArrayList<>();
     public Cle cle;
     public Plaque plaque;
+    public Katana katana;
 
     /**
      * les murs du labyrinthe
@@ -124,6 +126,9 @@ public class Labyrinthe {
         if (plaque != null && plaque.etrePresent(posX, posY)) {
             return PLAQUE;
         }
+        if (katana != null && katana.etrePresent(posX, posY)) {
+            return KATANA;
+        }
         else {
             return VIDE;
         }
@@ -131,7 +136,7 @@ public class Labyrinthe {
 
 
     public void traitement(char caseDevant, String Direction) {
-        System.out.println("LOG: caseDestination = " + caseDevant);
+        //System.out.println("LOG: caseDestination = " + caseDevant);
         direction = Direction;
         switch (caseDevant) {
             case MUR:
@@ -143,14 +148,8 @@ public class Labyrinthe {
                 break;
 
             case MONSTRE:
-                int[] suivante = getSuivant(pj.x, pj.y, direction);
-                for (Monstre monstre : monstres) {
-                    if (monstre.x == suivante[0] && monstre.y == suivante[1]) {
-                        pj.attaquer(monstre);
-                        deplacerMonstres();
-                        break;
-                    }
-                }
+                pj.attaquer(monstres, direction);
+                deplacerMonstres();
                 break;
 
             case SORTIE:
@@ -196,10 +195,17 @@ public class Labyrinthe {
                 deplacerMonstres();
                 break;
 
+            case KATANA:
+                pj.deplacerPerso(direction);
+                katana.ramasser();
+                pj.ramasserArme("katana");
+                deplacerMonstres();
+                break;
+
             default:
                 throw new Error("case inconnue");
         }
-        System.out.println("LOG: case arrivé = " + estDevant(pj.x, pj.y, direction));
+        //System.out.println("LOG: case arrivé = " + estDevant(pj.x, pj.y, direction));
     }
 
     public void ChangerEtatPorte() {
@@ -350,6 +356,12 @@ public class Labyrinthe {
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Plaque
                         this.plaque = new Plaque(colonne, numeroLigne);
+                        break;
+                    case KATANA:
+                        // pas de mur
+                        this.murs[colonne][numeroLigne] = false;
+                        // ajoute Katana
+                        this.katana = new Katana(colonne, numeroLigne);
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);

@@ -1,6 +1,8 @@
 package gameLaby.laby;
 
 
+import java.util.ArrayList;
+
 import static gameLaby.laby.Labyrinthe.direction;
 
 /**
@@ -9,6 +11,8 @@ import static gameLaby.laby.Labyrinthe.direction;
 public class Perso extends Entite{
 
     int pv = 10;
+    private String arme = "baton";
+    private final String[] arme_possible = {"baton", "katana"};
 
     /**
      * Constructeur de l'entité
@@ -46,8 +50,45 @@ public class Perso extends Entite{
         this.y = suivante[1];
     }
 
-    public void attaquer(Monstre monstre) {
-        monstre.subirDegat();
+    public void attaquer(ArrayList<Monstre> monstres, String direction) {
+        int[] suivante = Labyrinthe.getSuivant(x, y, direction);
+
+        switch (arme) {
+            case "baton":
+                for (Monstre monstre : monstres) {
+                    if (monstre.etrePresent(suivante[0], suivante[1])) {
+                        monstre.subirDegat();
+                        break;
+                    }
+                }
+                break;
+            case "katana":  // attaque sur 3 case horizontalement devant le joueur
+                ArrayList<Monstre> monstresTouches = new ArrayList<>();
+                switch (direction) {
+                    case Labyrinthe.HAUT:
+                    case Labyrinthe.BAS:
+                        for (Monstre monstre : monstres) {
+                            if (monstre.etrePresent(suivante[0], suivante[1]) || monstre.etrePresent(suivante[0] + 1, suivante[1]) || monstre.etrePresent(suivante[0] - 1, suivante[1])) {
+                                monstresTouches.add(monstre);
+                            }
+                        }
+                        break;
+                    case Labyrinthe.GAUCHE:
+                    case Labyrinthe.DROITE:
+                        for (Monstre monstre : monstres) {
+                            if (monstre.etrePresent(suivante[0], suivante[1]) || monstre.etrePresent(suivante[0], suivante[1] + 1) || monstre.etrePresent(suivante[0], suivante[1] - 1)) {
+                                monstresTouches.add(monstre);
+                            }
+                        }
+                        break;
+                    default:
+                        throw new Error("Direction inconnue");
+                }
+                for (Monstre monstre : monstresTouches) {
+                    monstre.subirDegat();
+                }
+        }
+
     }
 
     public void subirDegat() {
@@ -70,6 +111,19 @@ public class Perso extends Entite{
     private void mort() {
         System.out.println("Loutre a succombé");
         MainLaby.RechargerNiveau();
+    }
+
+    public void ramasserArme(String arme) {
+        boolean changer = false;
+        for (String arme_possible : arme_possible) {
+            if (arme.equals(arme_possible)) {
+                this.arme = arme;
+                changer = true;
+                System.out.println("Arme ramassée : " + arme);
+            }
+        }
+        if (!changer)
+            throw new Error("Arme inconnue");
     }
 
     // ############################################

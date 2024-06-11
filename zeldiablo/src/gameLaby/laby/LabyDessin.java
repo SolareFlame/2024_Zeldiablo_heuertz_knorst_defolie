@@ -146,6 +146,11 @@ public class LabyDessin implements DessinJeu {
         gc.setFill(Color.rgb(159, 74, 26));
         if (laby.cle != null)
             gc.fillRect(laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
+
+        // Katana
+        gc.setFill(Color.rgb(80, 10, 40));
+        if (laby.katana != null)
+            gc.fillRect(laby.katana.getX() * TAILLE, laby.katana.getY() * TAILLE, TAILLE, TAILLE);
     }
 
 

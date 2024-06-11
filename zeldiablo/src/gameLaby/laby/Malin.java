@@ -45,7 +45,7 @@ public class Malin extends Monstre {
             if (diffX > 0) {
                 //s'il n'y a pas de mur, de monstre ou de perso et si la case devant
                 // le monstre n'est pas la suivante du perso
-                if (!laby.murs[dx + 1][dy] && !laby.estMonstre(dx + 1, dy)) {
+                if (AllowedToMove(dx + 1, dy)) {
                     if (laby.pj.etrePresent(dx + 1, dy))
                         this.attaquer(laby.pj);
                     else
@@ -53,7 +53,7 @@ public class Malin extends Monstre {
                 }
 
             } else {
-                if (!laby.murs[dx - 1][dy] && !laby.estMonstre(dx - 1, dy)) {
+                if (AllowedToMove(dx - 1, dy)) {
                     if (laby.pj.etrePresent(dx - 1, dy))
                         this.attaquer(laby.pj);
                     else
@@ -62,14 +62,14 @@ public class Malin extends Monstre {
             }
         } else {
             if (diffY > 0) {
-                if (!laby.murs[dx][dy + 1] && !laby.estMonstre(dx, dy + 1)) {
+                if (AllowedToMove(dx, dy + 1)) {
                     if (laby.pj.etrePresent(dx, dy + 1))
                         this.attaquer(laby.pj);
                     else
                         this.y ++; // déplacement en bas
                 }
             } else {
-                if (!laby.murs[dx][dy - 1] && !laby.estMonstre(dx, dy - 1)) {
+                if (AllowedToMove(dx, dy - 1)) {
                     if (laby.pj.etrePresent(dx, dy - 1))
                         this.attaquer(laby.pj);
                     else

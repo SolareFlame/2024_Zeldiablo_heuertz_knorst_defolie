@@ -38,7 +38,14 @@ public abstract class Monstre extends Entite implements IA{
             throw new Error("Un monstre mort a ete attaque");
     }
 
-
+    public boolean AllowedToMove(int x, int y) {
+        for (Porte porte : laby.portes) {
+            if (porte.etrePresent(x, y) && !porte.estOuverte()) {
+                return false;
+            }
+        }
+        return !laby.murs[x][y] && !laby.estMonstre(x, y) && !laby.sortie.etrePresent(x, y);
+    }
     /*public void deplacerMonstre() {
 
         for (Monstre monstre : monstres) {

@@ -31,6 +31,7 @@ public class LabyDessin implements DessinJeu {
     final String EXIT = PATH + "ground/exit.png";
     final String KEY = PATH + "ground/key.png";
     final String ENTER = PATH + "ground/enter.png";
+    final String KATANA = PATH + "ground/katana.png";
 
     final String PJ = PATH + "pj/";
 
@@ -105,10 +106,13 @@ public class LabyDessin implements DessinJeu {
         gc.drawImage(img_enter, laby.entree.getX() * TAILLE + TAILLE / 2 - imgsize / 2, laby.entree.getY() * TAILLE + TAILLE - imgsize, imgsize, imgsize);
 
         // KATANA
-        gc.setFill(Color.rgb(80, 10, 40));
-        if (laby.katana != null)
-            gc.fillRect(laby.katana.getX() * TAILLE, laby.katana.getY() * TAILLE, TAILLE, TAILLE);
+        if(laby.katana != null) {
+            File imgf_katana = new File(KATANA);
+            String abs_katana = imgf_katana.getAbsolutePath();
+            Image img_katana = new Image(abs_katana);
 
+            gc.drawImage(img_katana, laby.katana.getX() * TAILLE + TAILLE / 2 - imgsize / 2, laby.katana.getY() * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+        }
 
         /*
         -------- MURS --------
@@ -160,7 +164,9 @@ public class LabyDessin implements DessinJeu {
         double pj_y = labyrinthe.getLabyrinthe().pj.getY();
 
         String direction = Labyrinthe.direction;
-        String etat = LabyJeu.attackAppuye ? "attack" : "idle";
+        String etat = "";
+        if(laby.pj.getArme() == "katana") etat = "idle_katana";
+        else etat = "idle";
 
         //MONSTRES AU DESSUS DU JOUEUR
         if (labyrinthe.getLabyrinthe().monstres != null) {
@@ -259,9 +265,9 @@ public class LabyDessin implements DessinJeu {
 
         // CHOIX DE L'ANIMATION
         switch (etat) {
-            case "attack":
-                delay = 2;
-                path += "attack/" + dir;
+            case "idle_katana":
+                delay = 10;
+                path += "idle_katana/" + dir;
                 chargerAnimation(gc, x, y, path, delay, entityId, etat, dir);
                 break;
             default:

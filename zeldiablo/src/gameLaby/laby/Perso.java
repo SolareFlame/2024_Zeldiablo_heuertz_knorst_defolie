@@ -154,4 +154,8 @@ public class Perso extends Entite{
     // ############################################
 
 
+    public String getArme() {
+        return arme;
+    }
+
 }

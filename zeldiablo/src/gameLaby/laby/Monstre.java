@@ -23,8 +23,14 @@ public abstract class Monstre extends Entite implements IA{
         this.laby = lab;
     }
 
+    /**
+     * Deplace le monstre, à définir pour chaque monstre
+     */
     public abstract void seDeplacer();
 
+    /**
+     * Fait perdre 1PV au monstre
+     */
     public void subirDegat() {
         if (pv > 0) {
             pv--;
@@ -38,36 +44,33 @@ public abstract class Monstre extends Entite implements IA{
             throw new Error("Un monstre mort a ete attaque");
     }
 
+    /**
+     * Verifie si le monstre peut se deplacer à la position x, y
+     * @param x
+     * @param y
+     * @return true si le monstre peut se deplacer à la position x, y
+     */
     public boolean AllowedToMove(int x, int y) {
         for (Porte porte : laby.portes) {
             if (porte.etrePresent(x, y) && !porte.estOuverte()) {
                 return false;
             }
         }
-        return !laby.murs[x][y] && !laby.estMonstre(x, y) && !laby.sortie.etrePresent(x, y);
+        return !laby.getMur(x, y) && !laby.estMonstre(x, y) && !laby.sortie.etrePresent(x, y);
     }
-    /*public void deplacerMonstre() {
 
-        for (Monstre monstre : monstres) {
-            String action = ACTIONS[random.nextInt(ACTIONS.length)];
-            int[] suivante = getSuivant(monstre.x, monstre.y, action);
-
-            if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-                for (Monstre monstre2 : monstres) {
-                    if (monstre2.x == suivante[0] && monstre2.y == suivante[1]) {
-                        return;
-                    }
-                }
-                monstre.x = suivante[0];
-                monstre.y = suivante[1];
-            }
-        }
-    }*/
-
+    /**
+     * Attaque le personnage
+     * @param perso
+     */
     public void attaquer(Perso perso) {
         perso.subirDegat();
     }
 
+    /**
+     * Retourne le nombre de PV du monstre
+     * @return le nombre de PV du monstre
+     */
     public int getPv() {
         return pv;
     }

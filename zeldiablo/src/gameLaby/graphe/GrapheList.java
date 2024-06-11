@@ -5,11 +5,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Classe représentant un graphe sous forme de liste
+ */
 public class GrapheList implements Graphe {
 
-    private ArrayList<String> noeuds; //nliste des noeuds du graphe (un noeud = un String) ;
-    private ArrayList<Arcs> adjacence; // la liste des Arcs partant de chaque noeud du graphe.
+    /**
+     * Liste des noeuds du graphe (un noeud = un String)
+     */
+    private ArrayList<String> noeuds;
+    /**
+     * Liste des arcs du graphe
+     */
+    private ArrayList<Arcs> adjacence;
 
+    /**
+     * Constructeur de la classe GrapheList
+     */
     public GrapheList() {
         noeuds = new ArrayList<String>();
         adjacence = new ArrayList<Arcs>();
@@ -43,11 +55,20 @@ public class GrapheList implements Graphe {
     }
 
 
+    /**
+     * @return la liste des noeuds du graphe
+     */
     @Override
     public ArrayList<String> listeNoeuds() {
         return noeuds;
     }
 
+    /**
+     * Qui retourne la liste des arcs partant du nœud n passé en paramètre.
+     *
+     * @param noeud
+     * @return
+     */
     public ArrayList<Arc> suivants(String noeud) {
         return adjacence.get(getIndice(noeud)).getArcs();
     }

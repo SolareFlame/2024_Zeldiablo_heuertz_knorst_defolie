@@ -1,17 +1,25 @@
 package gameLaby.laby;
 
-
 import java.util.ArrayList;
 
 import static gameLaby.laby.Labyrinthe.direction;
 
 /**
- * gere un personnage situe en x,y
+ * Classe representant le personnage dans le labyrinthe
  */
 public class Perso extends Entite{
 
+    /**
+     * Point de vie du personnage
+     */
     int pv = 10;
+    /**
+     * Arme du personnage
+     */
     private String arme = "baton";
+    /**
+     * Liste des armes possibles
+     */
     private final String[] arme_possible = {"baton", "katana"};
 
     /**
@@ -50,6 +58,12 @@ public class Perso extends Entite{
         this.y = suivante[1];
     }
 
+    /**
+     * Attaque les monstres dans la direction donnée avec l'arme possédée
+     *
+     * @param monstres  liste des monstres
+     * @param direction direction de l'attaque
+     */
     public void attaquer(ArrayList<Monstre> monstres, String direction) {
         int[] suivante = Labyrinthe.getSuivant(x, y, direction);
 
@@ -91,6 +105,9 @@ public class Perso extends Entite{
 
     }
 
+    /**
+     * Subit des dégats
+     */
     public void subirDegat() {
         if (pv > 0) {
             pv--;
@@ -104,15 +121,19 @@ public class Perso extends Entite{
             throw new Error("Un personnage mort a ete attaque");
     }
 
-    public boolean estMort() {
-        return pv == 0;
-    }
-
+    /**
+     * Mort du personnage
+     */
     private void mort() {
         System.out.println("Loutre a succombé");
         MainLaby.RechargerNiveau();
     }
 
+    /**
+     * Ramasse une arme et la remplace par l'ancienne
+     *
+     * @param arme arme à ramasser
+     */
     public void ramasserArme(String arme) {
         boolean changer = false;
         for (String arme_possible : arme_possible) {

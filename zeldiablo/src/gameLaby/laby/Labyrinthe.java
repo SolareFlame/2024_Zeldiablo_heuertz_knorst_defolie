@@ -60,7 +60,7 @@ public class Labyrinthe {
     /**
      * les murs du labyrinthe
      */
-    public boolean[][] murs;
+    private boolean[][] murs;
     //public boolean[][] murs_secret;
 
     /**
@@ -71,6 +71,13 @@ public class Labyrinthe {
 
     private Random random;
 
+    /**
+     * Retourne le caractere de la case devant le personnage
+     * @param posX
+     * @param posY
+     * @param direction
+     * @return
+     */
     public char estDevant(int posX, int posY, String direction) {
         switch (direction) {
             case HAUT:
@@ -96,12 +103,9 @@ public class Labyrinthe {
             return 'v';
         }
 
-        for (Monstre monstre : monstres) {
-            if (posX == monstre.x && posY == monstre.y) {
-                return MONSTRE;
-            }
+        if (estMonstre(posX, posY)) {
+            return MONSTRE;
         }
-
         if (getMur(posX, posY)) {
             return MUR;
         }
@@ -111,7 +115,6 @@ public class Labyrinthe {
         if (cle != null && cle.etrePresent(posX, posY)) {
             return CLE;
         }
-
         for (Porte porte : portes) {
             if (porte.etrePresent(posX, posY)) {
                     if (porte.type == 0) {  // porte à clef
@@ -134,7 +137,12 @@ public class Labyrinthe {
         }
     }
 
-
+    /**
+     * Fonction de traitement des actions en fonctions de la case devant le personnage
+     *
+     * @param caseDevant
+     * @param Direction
+     */
     public void traitement(char caseDevant, String Direction) {
         //System.out.println("LOG: caseDestination = " + caseDevant);
         direction = Direction;
@@ -208,7 +216,10 @@ public class Labyrinthe {
         //System.out.println("LOG: case arrivé = " + estDevant(pj.x, pj.y, direction));
     }
 
-    public void ChangerEtatPorte() {
+    /**
+     * Changer l'état des portes (ouvrir/fermer)
+     */
+    private void ChangerEtatPorte() {
         for (Porte porte : portes) {
             if (porte.type == 1) {
                 if (plaque.estActivee()) {
@@ -228,7 +239,7 @@ public class Labyrinthe {
      * @param action action effectuee
      * @return case suivante
      */
-    static int[] getSuivant(int x, int y, String action) {
+    public static int[] getSuivant(int x, int y, String action) {
         switch (action) {
             case HAUT:
                 // on monte une ligne
@@ -327,7 +338,7 @@ public class Labyrinthe {
                         // ajoute Sortie
                         this.sortie = new Sortie(colonne, numeroLigne);
                         break;
-                    case '9':  // porte à clef
+                    case PORTE_CLE:  // porte à clef
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
@@ -336,7 +347,7 @@ public class Labyrinthe {
                         else
                             this.portes.add(new Porte(colonne, numeroLigne, 0, false));
                         break;
-                    case '8':  // porte à mécanisme
+                    case PORTE_MECA:  // porte à mécanisme
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
@@ -405,15 +416,20 @@ public class Labyrinthe {
     }
 
     /**
-     * le monstre se déplace en se rapprochant du personnage
-     * gere la collision avec les murs et le personnage
-     */
+     * Fonction servant à faire déplacer tout les monstres
+     **/
     public void deplacerMonstres() {
         for (Monstre monstre : monstres) {
             monstre.seDeplacer();
         }
     }
 
+    /**
+     * Permet de savoir si un monstre est présent en (x,y)
+     * @param x
+     * @param y
+     * @return true si la case (x,y) contient un monstre
+     */
     public boolean estMonstre(int x, int y) {
         for (Monstre monstre : monstres) {
             if (monstre.x == x && monstre.y == y) {
@@ -432,8 +448,13 @@ public class Labyrinthe {
         return false;
     }
 
-
-
+    /**
+     * retourne le caractere representant la case (x,y)
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public char getCase(int x, int y) {
         if (pj.x == x && pj.y == y) {
             return PJ;

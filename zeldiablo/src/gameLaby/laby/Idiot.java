@@ -7,6 +7,9 @@ import java.util.Random;
  */
 public class Idiot extends Monstre {
 
+    /**
+     * Random pour les déplacements
+     */
     private Random random = new Random();
 
     /**

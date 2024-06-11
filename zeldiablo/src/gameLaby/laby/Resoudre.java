@@ -9,13 +9,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 
+/**
+ * Classe qui permet de résoudre un labyrinthe
+ */
 public class Resoudre {
 
+    /**
+     * Graphe du labyrinthe
+     */
     private GrapheList g;
 
 
     /**
-     * @param laby Labyrinthe
+     * Permet de mettre à jour le graphe du labyrinthe
      */
     public void updateGraphe(Labyrinthe laby, int x, int y) {
         g = new GrapheList();

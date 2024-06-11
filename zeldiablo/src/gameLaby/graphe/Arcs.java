@@ -2,10 +2,19 @@ package gameLaby.graphe;
 
 import java.util.*;
 
+/**
+ * Classe représentant une liste d'arcs
+ */
 public class Arcs {
 
+    /**
+     * Liste des arcs
+     */
     private ArrayList<Arc> arcs;
 
+    /**
+     * Constructeur
+     */
     public Arcs() {
         arcs = new ArrayList<Arc>();
     }

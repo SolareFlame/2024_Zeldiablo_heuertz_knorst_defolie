@@ -2,6 +2,9 @@ package gameLaby.graphe;
 
 import java.util.ArrayList;
 
+/**
+ * Interface représentant un graphe
+ */
 public interface Graphe {
     /**
      * listeNoeuds fournit la liste des nœuds d’un graphe donné.

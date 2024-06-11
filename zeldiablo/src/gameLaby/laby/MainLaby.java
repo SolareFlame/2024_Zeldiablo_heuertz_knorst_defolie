@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 
 public class MainLaby {
 
-    static int i = 7;
+    static int i = 0;
     static String chemin = "zeldiablo/labySimple/laby" + i + ".txt";
     static LabyJeu jeu;
 

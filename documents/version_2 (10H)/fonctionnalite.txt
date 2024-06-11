@@ -1,0 +1,69 @@
+5.2 Attaque du joueur
+Lorsque le joueur appuie sur une touche donnée (par défaut la touche espace), il
+effectue une attaque contre les monstres qui se trouvent à côté de lui.
+Critères de validation
+• L'attaque a effectivement lieu quand le joueur appuie sur la touche.
+• TOUS les monstres à côté du joueur prennent un point de dégât.
+• TOUS les monstres éloignés du joueur ne subissent pas de dégâts.
+• S'il n'y a aucun monstre autour du joueur, l'attaque à quand même lieu et empêche
+le déplacement du joueur, mais les monstres ne prennent pas de dégâts.
+
+5. Dash de 2 Case
+- Descriptif :
+  - le personnage peut faire un dash de 2 cases en appuyant sur la touche Shift.
+- Critères de validation :
+    - le personnage se déplace de 2 cases en appuyant sur la touche Shift.
+    - le personnage ne peut pas traverser les murs.
+    - le personnage ne peut pas se déplacer sur la case du monstre.
+
+2.3 Monstres attirés par le héros
+A chaque fois que les monstres se déplacent, les monstres tentent de réduire leur
+distance à vol d'oiseau par rapport au héros.
+Critères de validation
+• Après son déplacement, un monstre doit être plus proche du héros qu'avant son
+déplacement (distance de Manhattan sans prise en compte des murs).
+• Les monstres soumis aux obstacles peuvent se retrouver bloqués dans des cul-desac
+
+
+Mélange entre plusieurs fonctionnalités :
+- 1.3 Gestion des niveaux
+- 1.8 Gestion d'un labyrinthe multi-étages
+- 1.6 Ouverture de Passages secrets
+Pour avancer dans le jeux le prsonnage doit trouver des point de osrtie pour accéder à des niveaux supérieurs.
+
+11.3 Gestion d'un menu
+Plutot que de lancer directement le jeu, le joueur lance un menu qui lui permet de
+lancer le jeu ou de quitter l'application. Ce menu ré-apparait lorsque le joueur gagne
+ou perd.
+Critères de validation
+• Le menu possède une image spécifique.
+• Le menu propose deux options jouer ou quitter.
+• Le menu s'affiche dans la même JFrame que le rendu du jeu.
+• Pendant le menu, le jeu n'est pas créé et ne tourne pas.
+
+11.1 Affichage avec des sprites
+La fenêtre n'affiche plus des figures de base (rond, ...) mais des sprites représentant
+les personnages et les objets
+(http://fr.wikipedia.org/wiki/Sprite_%28jeu_vid%C3%A9o%29).
+Critères de validation
+• Les sprites concernent les murs, les monstres et le héros.
+• Ils sont chargés une fois pour toute au lancement de l'application et ils peuvent
+être affichés dans le JPanel grâce à la méthode drawImage.
+• Vous pourrez utiliser l'image http://www.qcfdesign.com/?p=354 qui est un ensemble de sprites pour le jeu Desktop Dungeons. Ces sprites sont disposés régulièrement dans l'image et sont donc facile à extraire à partir de l'Image.
+• Il est possible de charger une image (de type BufferedImage en mémoire grâce à
+la classe ImageIO et la méthode statique read).
+
+11.2 Configuration du clavier
+Il est possible de reconfigurer dans un fichier texte les touches pour contrôler le
+personnage.
+Critères de validation
+• Les touches sont décrites dans un fichier texte nomme "configTouches.txt"
+• Si le fichier n'existe pas, ce sont les touches par défaut qui sont utilisées.
+• le fichier de configuration est chargé une seule fois au lancement de l'application.
+
+6.1 Fin du jeu : mort du héros
+Lorsque le héros n'a plus de points de vie, le jeu s'arrête et la partie est perdue.
+Critères de validation
+• Le héros par défaut dispose de 5 points de vie.
+• Chaque monstre fait 1 point de dégât lorsque le héros se fait attaquer.
+• Quand le héros meurt, un message de fin est affiché sur la console et le jeu s'arrête.

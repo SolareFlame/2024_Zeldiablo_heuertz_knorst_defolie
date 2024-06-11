@@ -1,0 +1,35 @@
+2.4 Monstres au comportement intelligent
+A chaque fois que les monstres se déplacent, ils se rapprochent dans la direction du
+héros en prenant en compte la présence des murs.
+Critères de validation
+• Avant son déplacement, le monstre détermine le meilleur chemin pour atteindre
+le héros.
+• Le monstre prend en compte les obstacles qui le concernent pour trouver le meilleur
+chemin.
+• lorsqu'il se déplace, le monstre suit effectivement le meilleur chemin et parvient
+jusqu'au héros même s'il y a des obstacles.
+• vous pourrez vous inspirer (a) des transparents "IA dans le jeu vidéo" (transparents 112-130)
+
+2.5 Monstres avec intelligence variable
+En plus d'être de type différents (orc, troll, fantôme), les monstres peuvent avoir
+des degré d'intelligence différent. En fonction de ce degré d'intelligence, ils se déplacent
+différemment.
+Critères de validation
+• Un monstre d'intelligence nulle reste immobile.
+• Un monstre d'intelligence faible se déplace au hasard.
+• Un monstre d'intelligence moyenne cherche à se rapprocher du héros sans prendre
+en compte les obstacles.
+• Un monstre d'intelligence forte se rapproche du héros en évitant les obstacles.
+• Plusieurs monstres avec des intelligences différentes peuvent être présents dans le
+même labyrinthe.
+• Chaque type de monstre (Orc, Fantome, Troll) peut avoir n'importe quel type
+d'intelligence. On peut avoir dans le même labyrinthe des Orc d'intelligence nulle,
+faible, moyenne et forte. Idem pour les trolls et les fantômes.
+
+1.4 Cases déclencheur
+Lorsque une entité arrive sur certaines cases, ces cases déclenchent un effet.
+Critères de validation
+• Les cases avec effet sont des cases traversables.
+• Lorsqu'un personnage (héros ou monstre) marche sur cette case, elle déclenche
+immédiatement un effet
+• cet effet se traduit pour le moment, par un affichage dans la console à préciser.

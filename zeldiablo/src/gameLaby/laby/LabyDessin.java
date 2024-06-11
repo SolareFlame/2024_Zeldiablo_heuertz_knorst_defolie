@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static javafx.scene.paint.Color.rgb;
+
 /**
  * Classe LabyDessin
  */
@@ -51,7 +53,7 @@ public class LabyDessin implements DessinJeu {
         -------- SOL --------
         */
         // SOL
-        gc.setFill(Color.rgb(20, 160, 46));
+        gc.setFill(rgb(20, 160, 46));
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
         //SORTIE
@@ -116,7 +118,7 @@ public class LabyDessin implements DessinJeu {
         /*
         -------- MURS TOP --------
          */
-        gc.setFill(Color.rgb(25, 22, 20));
+        gc.setFill(rgb(25, 22, 20));
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
@@ -131,21 +133,24 @@ public class LabyDessin implements DessinJeu {
         //numCases(gc, laby);
 
         // PORTE
-        gc.setFill(Color.rgb(170, 20, 120));
+        gc.setFill(rgb(170, 20, 120));
 
         for (Porte portes : laby.portes) {
             gc.fillRect(portes.getX() * TAILLE, portes.getY() * TAILLE, TAILLE, TAILLE);
         }
 
         // plaque
-        gc.setFill(Color.rgb(74, 200, 140));
+        gc.setFill(rgb(74, 200, 140));
         if (laby.plaque != null)
             gc.fillRect(laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
 
         // clé
-        gc.setFill(Color.rgb(159, 74, 26));
+        gc.setFill(rgb(159, 74, 26));
         if (laby.cle != null)
             gc.fillRect(laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
+
+        // vie
+        chargerVie(gc, laby);
 
         // Katana
         gc.setFill(Color.rgb(80, 10, 40));
@@ -327,4 +332,26 @@ public class LabyDessin implements DessinJeu {
             }
         }
     }
+
+    public void barreVie(GraphicsContext gc, double healthPercentage, double x, double y, double maxWidth, double height) {
+        gc.setFill(rgb(255, 0, 0, 0.5));
+        gc.fillRect(x, y, maxWidth, height);
+
+        double healthWidth = maxWidth * healthPercentage;
+
+        gc.setFill(Color.RED);
+        gc.fillRect(x, y, healthWidth, height);
+    }
+
+    public void chargerVie(GraphicsContext gc, Labyrinthe laby) {
+        double maxWidth = 200;
+        double height = 20;
+        double x = 20;
+        double y = 20;
+        double healthPercentage = (double) laby.pj.pv / 10;
+        gc.setFill(Color.WHITE);
+        gc.fillText("PV:", 0, 35);
+        barreVie(gc, healthPercentage, x, y, maxWidth, height);
+    }
+
 }

@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
+import moteurJeu.MoteurJeu;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import static javafx.scene.paint.Color.rgb;
  */
 public class LabyDessin implements DessinJeu {
 
-    public static final int TAILLE = 50;
+    public static double TAILLE = 50;
 
     private Map<String, AnimationState> animationStates = new HashMap<>();
 
@@ -40,6 +41,7 @@ public class LabyDessin implements DessinJeu {
     final LabyEffect labyEffect = new LabyEffect();
 
 
+
     /**
      * Méthode permettant de dessiner l'état du jeu dans le canvas
      * @param jeu    jeu a afficher dans le canvas
@@ -52,6 +54,11 @@ public class LabyDessin implements DessinJeu {
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         Labyrinthe laby = labyrinthe.getLabyrinthe();
 
+        // DONNES VISUELLES
+        TAILLE = (int) canvas.getWidth() / 20;
+
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         /*
         -------- SOL --------
         */
@@ -59,25 +66,26 @@ public class LabyDessin implements DessinJeu {
         gc.setFill(Color.rgb(20, 160, 46));
         gc.fillRect(0, 0, laby.getLength() * TAILLE, laby.getLengthY() * TAILLE);
 
-        // plaque
-        if (laby.plaque != null) {
-            String plaque = PATH + "ground/button_notactive.png";
-            if (laby.plaque.active) plaque = PATH + "ground/button_active.png";
-
-            File imgf_plaque = new File(plaque);
-            String abs_plaque = imgf_plaque.getAbsolutePath();
-            Image img_plaque = new Image(abs_plaque);
-
-            gc.drawImage(img_plaque, laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
-        }
-
-        // clé
+        // CLE
         if (laby.cle != null) {
             File imgf_key = new File(KEY);
             String abs_key = imgf_key.getAbsolutePath();
             Image img_key = new Image(abs_key);
 
             gc.drawImage(img_key, laby.cle.getX() * TAILLE, laby.cle.getY() * TAILLE, TAILLE, TAILLE);
+        }
+
+        //PLAQUE
+        if (laby.plaque != null) {
+            String plaque_path = PATH + "ground/button_";
+            if(laby.plaque.active) plaque_path += "active.png";
+            else plaque_path += "notactive.png";
+
+            File imgf_plaque = new File(plaque_path);
+            String abs_plaque = imgf_plaque.getAbsolutePath();
+            Image img_plaque = new Image(abs_plaque);
+
+            gc.drawImage(img_plaque, laby.plaque.getX() * TAILLE, laby.plaque.getY() * TAILLE, TAILLE, TAILLE);
         }
 
         //SORTIE
@@ -95,6 +103,12 @@ public class LabyDessin implements DessinJeu {
         Image img_enter = new Image(abs_enter);
 
         gc.drawImage(img_enter, laby.entree.getX() * TAILLE + TAILLE / 2 - imgsize / 2, laby.entree.getY() * TAILLE + TAILLE - imgsize, imgsize, imgsize);
+
+        // KATANA
+        gc.setFill(Color.rgb(80, 10, 40));
+        if (laby.katana != null)
+            gc.fillRect(laby.katana.getX() * TAILLE, laby.katana.getY() * TAILLE, TAILLE, TAILLE);
+
 
         /*
         -------- MURS --------
@@ -123,7 +137,7 @@ public class LabyDessin implements DessinJeu {
             if(porte.vertical) {
                 porte_path += "vertical/";
                 etirement_horizontal = 2;
-                decalage_horizontal = TAILLE;
+                decalage_horizontal = (int) TAILLE;
                 }
             else porte_path += "horizontal/";
 
@@ -207,12 +221,13 @@ public class LabyDessin implements DessinJeu {
             }
         }
         // vie
-        chargerVie(gc, laby);
+        LabyHUD hud = new LabyHUD(gc, laby);
+        hud.chargerVie();
 
-        // Katana
-        gc.setFill(Color.rgb(80, 10, 40));
-        if (laby.katana != null)
-            gc.fillRect(laby.katana.getX() * TAILLE, laby.katana.getY() * TAILLE, TAILLE, TAILLE);
+        if(laby.cle != null)
+            if (laby.cle.estRamasse()) {
+                hud.chargerIcon(KEY);
+            }
     }
 
 
@@ -389,26 +404,4 @@ public class LabyDessin implements DessinJeu {
             }
         }
     }
-
-    public void barreVie(GraphicsContext gc, double healthPercentage, double x, double y, double maxWidth, double height) {
-        gc.setFill(rgb(255, 0, 0, 0.5));
-        gc.fillRect(x, y, maxWidth, height);
-
-        double healthWidth = maxWidth * healthPercentage;
-
-        gc.setFill(Color.RED);
-        gc.fillRect(x, y, healthWidth, height);
-    }
-
-    public void chargerVie(GraphicsContext gc, Labyrinthe laby) {
-        double maxWidth = 200;
-        double height = 20;
-        double x = 20;
-        double y = 20;
-        double healthPercentage = (double) laby.pj.pv / 10;
-        gc.setFill(Color.WHITE);
-        gc.fillText("PV:", 0, 35);
-        barreVie(gc, healthPercentage, x, y, maxWidth, height);
-    }
-
 }

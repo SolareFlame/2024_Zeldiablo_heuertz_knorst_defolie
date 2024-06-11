@@ -1,0 +1,239 @@
+@startuml
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Alpha {
+  + Alpha(int, int, Labyrinthe):
+  + seDeplacer(): void
+}
+class AnimationState {
+  + AnimationState(ArrayList<Image>, String, String):
+  - direction: String
+  - animationEnCours: boolean
+  - frameCounter: int
+  - images: ArrayList<Image>
+  - etat: String
+  + startAnimation(): void
+  + addFrameCounter(): void
+  + stopAnimation(): void
+   etat: String
+   frameCounter: int
+   direction: String
+   images: ArrayList<Image>
+   animationEnCours: boolean
+}
+class Arc {
+  + Arc(String, double):
+  - dest: String
+  - cout: double
+   dest: String
+   cout: double
+}
+class Arcs {
+  + Arcs():
+  - arcs: ArrayList<Arc>
+  + ajouterArc(Arc): void
+  + toString(): String
+   arcs: ArrayList<Arc>
+}
+class Clavier {
+  + Clavier():
+  + appuyerTouche(KeyEvent): void
+  + relacherTouche(KeyEvent): void
+}
+interface DessinJeu << interface >> {
+  + dessinerJeu(Jeu, Canvas): void
+}
+class Entite {
+  + Entite(int, int):
+  # x: int
+  # y: int
+  + etrePresent(int, int): boolean
+   y: int
+   x: int
+}
+class Entree {
+  + Entree(int, int):
+}
+class FrameStats {
+  + FrameStats():
+  - frameCount: long
+  - meanFrameInterval: double
+  - text: ReadOnlyStringWrapper
+  + textProperty(): ReadOnlyStringProperty
+  + toString(): String
+  + addFrame(long): void
+   frameCount: long
+   text: String
+   meanFrameInterval: double
+}
+interface Graphe << interface >> {
+  + suivants(String): ArrayList<Arc>
+  + listeNoeuds(): ArrayList<String>
+}
+class GrapheList {
+  + GrapheList():
+  + GrapheList(String):
+  + getIndice(String): int
+  + toString(): String
+  + suivants(String): ArrayList<Arc>
+  + ajouterArc(String, String, double): void
+  + listeNoeuds(): ArrayList<String>
+}
+interface IA << interface >> {
+  + seDeplacer(): void
+}
+class Idiot {
+  + Idiot(int, int, Labyrinthe):
+  + seDeplacer(): void
+}
+interface Jeu << interface >> {
+  + init(): void
+  + etreFini(): boolean
+  + update(double, Clavier): void
+}
+class LabyDessin {
+  + LabyDessin():
+  + chargerAnimation(GraphicsContext, double, double, String, int, String, String, String): void
+  - chargerMonstres(GraphicsContext, ArrayList<Monstre>, double, boolean): void
+  + dessinerHitbox(GraphicsContext, double, double): void
+  + numCases(GraphicsContext, Labyrinthe): void
+  + dessinerJeu(Jeu, Canvas): void
+  + chargerEntite(GraphicsContext, double, double, String, String, String, String): void
+}
+class LabyJeu {
+  + LabyJeu(String):
+  - labyrinthe: Labyrinthe
+  + update(double, Clavier): void
+  + etreFini(): boolean
+  + init(): void
+   labyrinthe: Labyrinthe
+}
+class Labyrinthe {
+  + Labyrinthe(String):
+  + getCase(int, int): char
+  ~ getSuivant(int, int, String): int[]
+  + deplacerMonstres(): void
+  + getMur(int, int): boolean
+  + dashDe2Cases(): void
+  + etreFini(): boolean
+  + traitement(char, String): void
+  + estDevant(int, int, String): char
+  + estMonstre(int, int): boolean
+   lengthY: int
+   length: int
+}
+class MainLaby {
+  + MainLaby():
+  + RechargerNiveau(): void
+  + main(String[]): void
+  + chargerProchainNiveau(): void
+}
+class Malin {
+  + Malin(int, int, Labyrinthe):
+  + seDeplacer(): void
+}
+class Monstre {
+  + Monstre(int, int, Labyrinthe):
+  # pv: int
+  + seDeplacer(): void
+  + attaquer(Perso): void
+  + subirDegat(): void
+   pv: int
+}
+class MoteurJeu {
+  + MoteurJeu():
+  - FPS: double
+  + start(Stage): void
+  + setTaille(double, double): void
+  - startAnimation(Canvas): void
+  + launch(Jeu, DessinJeu): void
+   FPS: int
+}
+class Perso {
+  + Perso(int, int):
+  - mort(): void
+  + estMort(): boolean
+  + subirDegat(): void
+  + deplacerPerso(String): void
+  + etrePresent(int, int): boolean
+  + attaquer(Monstre): void
+}
+class Resoudre {
+  + Resoudre():
+  + updateGraphe(Labyrinthe, int, int): void
+  + resoudre(int, int, int, int): int[]
+}
+class Sortie {
+  + Sortie(int, int):
+}
+class Valeur {
+  + Valeur():
+  + setParent(String, String): void
+  + setValeur(String, double): void
+  + getValeur(String): double
+  + toString(): String
+  + getParent(String): String
+  + calculerChemin(String): ArrayList<String>
+}
+class testDash {
+  + testDash():
+  + setup(): void
+  + test_dash2deCase_pendantCooldown(): void
+  + test_dash2deCase_apresCooldown(): void
+}
+class testMonstre {
+  + testMonstre():
+  + test_mort_et_reattaque(): void
+  + test_prise_degat(): void
+  + test_mort(): void
+}
+
+Alpha           -[#000082,plain]-^  Monstre
+Alpha           -[#595959,dashed]->  Resoudre       : "«create»"
+Arcs           "1" *-[#595959,plain]-> "arcs\n*" Arc
+Entree          -[#000082,plain]-^  Entite
+GrapheList      -[#595959,dashed]->  Arc            : "«create»"
+GrapheList      -[#595959,dashed]->  Arcs           : "«create»"
+GrapheList     "1" *-[#595959,plain]-> "adjacence\n*" Arcs
+GrapheList      -[#008200,dashed]-^  Graphe
+Idiot           -[#000082,plain]-^  Monstre
+LabyDessin      -[#595959,dashed]->  AnimationState : "«create»"
+LabyDessin     "1" *-[#595959,plain]-> "animationStates\n*" AnimationState
+LabyDessin      -[#008200,dashed]-^  DessinJeu
+LabyJeu         -[#008200,dashed]-^  Jeu
+LabyJeu        "1" *-[#595959,plain]-> "labyrinthe\n1" Labyrinthe
+LabyJeu         -[#595959,dashed]->  Labyrinthe     : "«create»"
+Labyrinthe      -[#595959,dashed]->  Alpha          : "«create»"
+Labyrinthe      -[#595959,dashed]->  Entree         : "«create»"
+Labyrinthe     "1" *-[#595959,plain]-> "entree\n1" Entree
+Labyrinthe      -[#595959,dashed]->  Idiot          : "«create»"
+Labyrinthe      -[#595959,dashed]->  Malin          : "«create»"
+Labyrinthe     "1" *-[#595959,plain]-> "monstres\n*" Monstre
+Labyrinthe     "1" *-[#595959,plain]-> "pj\n1" Perso
+Labyrinthe      -[#595959,dashed]->  Perso          : "«create»"
+Labyrinthe     "1" *-[#595959,plain]-> "sortie\n1" Sortie
+Labyrinthe      -[#595959,dashed]->  Sortie         : "«create»"
+MainLaby        -[#595959,dashed]->  LabyDessin     : "«create»"
+MainLaby       "1" *-[#595959,plain]-> "jeu\n1" LabyJeu
+MainLaby        -[#595959,dashed]->  LabyJeu        : "«create»"
+Malin           -[#000082,plain]-^  Monstre
+Monstre         -[#000082,plain]-^  Entite
+Monstre         -[#008200,dashed]-^  IA
+Monstre        "1" *-[#595959,plain]-> "laby\n1" Labyrinthe
+MoteurJeu      "1" *-[#595959,plain]-> "controle\n1" Clavier
+MoteurJeu       -[#595959,dashed]->  Clavier        : "«create»"
+MoteurJeu      "1" *-[#595959,plain]-> "dessin\n1" DessinJeu
+MoteurJeu      "1" *-[#595959,plain]-> "frameStats\n1" FrameStats
+MoteurJeu       -[#595959,dashed]->  FrameStats     : "«create»"
+MoteurJeu      "1" *-[#595959,plain]-> "jeu\n1" Jeu
+Perso           -[#000082,plain]-^  Entite
+Resoudre       "1" *-[#595959,plain]-> "g\n1" GrapheList
+Resoudre        -[#595959,dashed]->  GrapheList     : "«create»"
+Resoudre        -[#595959,dashed]->  Valeur         : "«create»"
+Sortie          -[#000082,plain]-^  Entite
+testDash        -[#595959,dashed]->  Labyrinthe     : "«create»"
+testDash       "1" *-[#595959,plain]-> "laby\n1" Labyrinthe
+testMonstre     -[#595959,dashed]->  Labyrinthe     : "«create»"
+@enduml

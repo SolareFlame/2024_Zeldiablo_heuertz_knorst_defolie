@@ -325,13 +325,19 @@ public class Labyrinthe {
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
-                        this.portes.add(new Porte(colonne, numeroLigne, 0));
+                        if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
+                            this.portes.add(new Porte(colonne, numeroLigne, 0, true));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 0, false));
                         break;
                     case '8':  // porte à mécanisme
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute Porte
-                        this.portes.add(new Porte(colonne, numeroLigne, 1));
+                        if (this.murs[colonne-1][numeroLigne])  // un mur à gauche est present
+                            this.portes.add(new Porte(colonne, numeroLigne, 1, true));
+                        else
+                            this.portes.add(new Porte(colonne, numeroLigne, 1, false));
                         break;
                     case CLE:
                         // pas de mur

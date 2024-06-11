@@ -3,10 +3,12 @@ package gameLaby.laby;
 public class Porte extends Entite{
     private boolean ouvert = false;
     public int type;
+    public boolean vertical;
 
-    public Porte(int dx, int dy, int typePorte) {
+    public Porte(int dx, int dy, int typePorte, boolean verti) {
         super(dx, dy);
         this.type = typePorte;
+        this.vertical = verti;
     }
 
     public void ouvrir() {

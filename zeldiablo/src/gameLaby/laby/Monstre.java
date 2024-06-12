@@ -32,11 +32,11 @@ public abstract class Monstre extends Entite implements IA{
     /**
      * Fait perdre 1PV au monstre
      */
-    public void subirDegat() {
+    public void subirDegat(int degat_recue) {
         if (pv > 0) {
-            pv--;
+            pv = pv - degat_recue;
             estAttaque = true;
-            if (pv == 0) {
+            if (pv <= 0) {
                 System.out.println("Monstre " + name + " éliminé");
                 laby.monstres.remove(this);
             } else {

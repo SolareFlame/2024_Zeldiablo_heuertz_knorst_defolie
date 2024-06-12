@@ -27,7 +27,7 @@ public class LabyJeu implements Jeu {
      */
     public LabyJeu(String nom) throws IOException {
         if (Labyrinthe.pj == null) {
-            labyrinthe = new Labyrinthe(nom, new Perso(0, 0));
+            labyrinthe = new Labyrinthe(nom);
         } else {
             labyrinthe = new Labyrinthe(nom, Labyrinthe.pj);
         }

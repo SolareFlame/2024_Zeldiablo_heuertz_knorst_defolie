@@ -74,13 +74,19 @@ public class MoteurJeu extends Application {
      * @param dessin dessin du jeu
      */
     public static void launch(Jeu jeu, DessinJeu dessin) {
-        // le jeu en cours et son afficheur
-        MoteurJeu.jeu = jeu;
-        MoteurJeu.dessin = dessin;
+        try {
+            // le jeu en cours et son afficheur
+            MoteurJeu.jeu = jeu;
+            MoteurJeu.dessin = dessin;
 
-        // si le jeu existe, on lance le moteur de jeu
-        if (jeu != null)
-            launch();
+            // si le jeu existe, on lance le moteur de jeu
+            if (jeu != null)
+                launch();
+        } catch (IllegalStateException e) {
+            System.out.println("\n");
+        }
+
+
     }
 
     /**

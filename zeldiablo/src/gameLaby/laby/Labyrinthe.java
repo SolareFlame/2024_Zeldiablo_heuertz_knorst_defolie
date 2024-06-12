@@ -267,6 +267,15 @@ public class Labyrinthe {
     }
 
     /**
+     * Constructeur de labyrinthe lorsque aucun joueur n'est donné
+     *
+     * @param nom nom du fichier de labyrinthe
+     * @throws IOException probleme a la lecture / ouverture
+     */
+    public Labyrinthe(String nom) throws IOException {
+        this(nom, new Perso(0, 0));  // Si 1er niveau, le joueur est faussement initialisé
+    }
+    /**
      * charge le labyrinthe
      *
      * @param nom nom du fichier de labyrinthe
@@ -319,7 +328,7 @@ public class Labyrinthe {
                             pj = joueur;
                             pj.x = colonne;
                             pj.y = numeroLigne;
-                            pj.pv = 10;
+                            pj.pv = pj.getMax_vie();
                         }
                         this.entree = new Entree(colonne, numeroLigne);
                         break;

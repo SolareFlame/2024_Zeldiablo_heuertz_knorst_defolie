@@ -23,6 +23,9 @@ public class Perso extends Entite{
     private final String[] arme_possible = {"baton", "katana"};
     boolean estAttaque = false;
 
+    private int degat = 1;
+    private int max_vie = 10;
+
     /**
      * Constructeur de l'entité
      *
@@ -72,7 +75,7 @@ public class Perso extends Entite{
             case "baton":
                 for (Monstre monstre : monstres) {
                     if (monstre.etrePresent(suivante[0], suivante[1])) {
-                        monstre.subirDegat();
+                        monstre.subirDegat(degat);
                         break;
                     }
                 }
@@ -100,7 +103,7 @@ public class Perso extends Entite{
                         throw new Error("Direction inconnue");
                 }
                 for (Monstre monstre : monstresTouches) {
-                    monstre.subirDegat();
+                    monstre.subirDegat(degat);
                 }
         }
 
@@ -131,6 +134,13 @@ public class Perso extends Entite{
         MainLaby.RechargerNiveau();
     }
 
+    public void levelup() {
+        max_vie++;max_vie++;
+        degat++;
+        pv = max_vie;
+        System.out.println("Level up !");
+    }
+
     /**
      * Ramasse une arme et la remplace par l'ancienne
      *
@@ -156,6 +166,10 @@ public class Perso extends Entite{
 
     public String getArme() {
         return arme;
+    }
+
+    public int getMax_vie() {
+        return max_vie;
     }
 
 }

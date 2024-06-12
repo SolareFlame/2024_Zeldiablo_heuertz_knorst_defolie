@@ -1,0 +1,175 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype polyline
+
+class Alpha {
+  + Alpha(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class AnimationState {
+  + AnimationState(ArrayList<Image>, String, String): 
+  - animationEnCours: boolean
+  - etat: String
+  - frameCounter: int
+  - direction: String
+  - images: ArrayList<Image>
+  + stopAnimation(): void
+  + addFrameCounter(): void
+  + startAnimation(): void
+   frameCounter: int
+   etat: String
+   direction: String
+   images: ArrayList<Image>
+   animationEnCours: boolean
+}
+class Cle {
+  + Cle(int, int): 
+  + estRamasse(): boolean
+  + ramasser(): void
+}
+class Entite {
+  + Entite(int, int): 
+  # y: int
+  # x: int
+  + etrePresent(int, int): boolean
+   y: int
+   x: int
+}
+class Entree {
+  + Entree(int, int): 
+}
+interface IA << interface >> {
+  + seDeplacer(): void
+}
+class Idiot {
+  + Idiot(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class Katana {
+  + Katana(int, int): 
+  + ramasser(): void
+}
+class LabyDessin {
+  + LabyDessin(): 
+  + numCases(GraphicsContext, Labyrinthe): void
+  + dessinerHitbox(GraphicsContext, double, double): void
+  + chargerEntite(GraphicsContext, double, double, String, String, String, String): void
+  - chargerMonstres(GraphicsContext, ArrayList<Monstre>, double, boolean): void
+  + dessinerJeu(Jeu, Canvas): void
+  + chargerAnimation(GraphicsContext, double, double, String, int, String, String, String): void
+}
+class LabyEffect {
+  + LabyEffect(): 
+  + dessinerEffet(GraphicsContext, String, double, double, int): void
+  + chargerEffet(GraphicsContext, double, double, String, int): void
+}
+class LabyHUD {
+  + LabyHUD(GraphicsContext, Labyrinthe): 
+  + barreVie(double, double, double, double, double): void
+  + chargerVie(): void
+  + chargerIcon(String): void
+}
+class LabyJeu {
+  + LabyJeu(String): 
+  - labyrinthe: Labyrinthe
+  + update(double, Clavier): void
+  + etreFini(): boolean
+  + init(): void
+   labyrinthe: Labyrinthe
+}
+class Labyrinthe {
+  + Labyrinthe(String, Perso): 
+  + getCase(int, int): char
+  - ChangerEtatPorte(): void
+  + deplacerMonstres(): void
+  + estDevant(int, int, String): char
+  + etreFini(): boolean
+  + traitement(char, String): void
+  + dashDe2Cases(): void
+  + estMonstre(int, int): boolean
+  + getSuivant(int, int, String): int[]
+  + getMur(int, int): boolean
+   lengthY: int
+   length: int
+}
+class MainLaby {
+  + MainLaby(): 
+  + chargerProchainNiveau(): void
+  + RechargerNiveau(): void
+  + main(String[]): void
+}
+class Malin {
+  + Malin(int, int, Labyrinthe): 
+  + seDeplacer(): void
+}
+class Monstre {
+  + Monstre(int, int, Labyrinthe): 
+  # pv: int
+  + attaquer(Perso): void
+  + subirDegat(): void
+  + seDeplacer(): void
+  + AllowedToMove(int, int): boolean
+   pv: int
+}
+class Perso {
+  + Perso(int, int): 
+  - arme: String
+  + subirDegat(): void
+  - mort(): void
+  + attaquer(ArrayList<Monstre>, String): void
+  + deplacerPerso(String): void
+  + ramasserArme(String): void
+  + etrePresent(int, int): boolean
+   arme: String
+}
+class Plaque {
+  + Plaque(int, int): 
+  + changerEtat(): void
+  + estActivee(): boolean
+}
+class Porte {
+  + Porte(int, int, int, boolean): 
+  + type: int
+  + estOuverte(): boolean
+  + ouvrir(): void
+  + fermer(): void
+   type: String
+}
+class Resoudre {
+  + Resoudre(): 
+  + updateGraphe(Labyrinthe, int, int): void
+  + resoudre(int, int, int, int): int[]
+}
+class Sortie {
+  + Sortie(int, int): 
+}
+
+Alpha           -[#000082,plain]-^  Monstre        
+Cle             -[#000082,plain]-^  Entite         
+Entree          -[#000082,plain]-^  Entite         
+Idiot           -[#000082,plain]-^  Monstre        
+Katana          -[#000082,plain]-^  Entite         
+LabyDessin     "1" *-[#595959,plain]-> "animationStates\n*" AnimationState 
+LabyDessin     "1" *-[#595959,plain]-> "labyEffect\n1" LabyEffect     
+LabyHUD        "1" *-[#595959,plain]-> "laby\n1" Labyrinthe     
+LabyJeu        "1" *-[#595959,plain]-> "labyrinthe\n1" Labyrinthe     
+Labyrinthe     "1" *-[#595959,plain]-> "cle\n1" Cle            
+Labyrinthe     "1" *-[#595959,plain]-> "entree\n1" Entree         
+Labyrinthe     "1" *-[#595959,plain]-> "katana\n1" Katana         
+Labyrinthe     "1" *-[#595959,plain]-> "monstres\n*" Monstre        
+Labyrinthe     "1" *-[#595959,plain]-> "pj\n1" Perso          
+Labyrinthe     "1" *-[#595959,plain]-> "plaque\n1" Plaque         
+Labyrinthe     "1" *-[#595959,plain]-> "portes\n*" Porte          
+Labyrinthe     "1" *-[#595959,plain]-> "sortie\n1" Sortie         
+MainLaby       "1" *-[#595959,plain]-> "jeu\n1" LabyJeu        
+Malin           -[#000082,plain]-^  Monstre        
+Monstre         -[#000082,plain]-^  Entite         
+Monstre         -[#008200,dashed]-^  IA             
+Monstre        "1" *-[#595959,plain]-> "laby\n1" Labyrinthe     
+Perso           -[#000082,plain]-^  Entite         
+Plaque          -[#000082,plain]-^  Entite         
+Porte           -[#000082,plain]-^  Entite         
+Sortie          -[#000082,plain]-^  Entite         
+@enduml

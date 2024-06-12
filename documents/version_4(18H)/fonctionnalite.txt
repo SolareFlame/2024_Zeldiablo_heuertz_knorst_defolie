@@ -1,0 +1,29 @@
+-Porte et clefs et plaque de pression
+     Des portes sont présentes dans le labyrinthe qui sont fermée.
+     Pour les ouvrir, il faut trouver la clef correspondante.
+     Une fois la clef trouvée, il faut la placer dans la serrure de la porte pour l'ouvrir.
+     Ou bien, il faut trouver la plaque de pression correspondante pour ouvrir la porte.
+     -critere de validation
+        Les portes sont fermées et ne peuvent pas être traversées.
+        Les portes s'ouvrent lorsqu'on trouve la clef correspondante et qu'on la place dans la serrure.
+        Les portes s'ouvrent lorsqu'on trouve la plaque de pression correspondante.
+
+-HUD
+    Un HUD est présent pour afficher les informations du joueur.
+    Il affiche le nombre de clés et ses points de vie.
+    -critere de validation
+        Le HUD est présent et affiche le nombre de clés et de plaques de pression que le joueur possède.
+        Le HUD affiche les points de vie du joueur.
+        Les points de vie du joueur sont mis à jour lorsqu'il prend des dégâts.
+        La barre de vie s'agrandit quand le perso augmente ses points de vie max.
+
+-Katana avec attaque spécifique a l'arme
+    Le joueur possède un katana qui lui permet d'attaquer les ennemis.
+    Le katana possède une attaque spécifique qui permet de taper sur les trois cases devant lui.
+    -critere de validation
+        Le joueur possède un katana.
+        Le katana possède une attaque spécifique qui tape les trois cases devant lui
+        Le katana inflige des dégâts aux ennemis.
+
+
+

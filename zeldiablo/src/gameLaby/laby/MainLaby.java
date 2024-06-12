@@ -12,7 +12,7 @@ import javafx.scene.media.MediaPlayer;
 public class MainLaby {
 
     /** Niveau actuel ou niveau chargé au depart si modifié */
-    static int i = 7;
+    static int i = 0;
 
     static int nbrNiveaux = 0;
     static String chemin = "zeldiablo/labySimple/laby" + i + ".txt";

@@ -13,6 +13,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -25,6 +26,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -173,6 +177,8 @@ public class MoteurJeu extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        // Play the media once the stage is shown
+        //player.play();
 
         // listener clavier
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

@@ -3,13 +3,19 @@ package gameLaby.laby;
 import moteurJeu.MoteurJeu;
 
 import java.io.FileNotFoundException;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class MainLaby {
 
+    /** Niveau actuel ou niveau chargé au depart si modifié */
     static int i = 0;
     static String chemin = "zeldiablo/labySimple/laby" + i + ".txt";
     static LabyJeu jeu;
 
+    /**
+     * Recharge le niveau actuel
+     */
     public static void RechargerNiveau() {
         try {
             chemin = "zeldiablo/labySimple/laby" + i + ".txt";
@@ -24,6 +30,10 @@ public class MainLaby {
         }
     }
 
+
+    /**
+     * Charge le prochain niveau
+     */
     public static void chargerProchainNiveau() {
         try {
             i++;
@@ -40,6 +50,11 @@ public class MainLaby {
     }
 
     public static void main(String[] args) {
+        /**
+        Media pick = new Media("file:// zeldiablo/ressources/sound/m1.mp3"); //throws here
+        MediaPlayer player = new MediaPlayer(pick);
+        player.play();
+        **/
         MoteurJeu.setFPS(60);
         RechargerNiveau();
     }

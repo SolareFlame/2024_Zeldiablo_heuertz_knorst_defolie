@@ -48,7 +48,7 @@ public class Labyrinthe {
     /**
      * attributs du personnage et du monstre
      */
-    public Perso pj;
+    public static Perso pj;
     public ArrayList<Monstre> monstres = new ArrayList<>();
     public Sortie sortie;
     public Entree entree;
@@ -273,7 +273,7 @@ public class Labyrinthe {
      * @return labyrinthe cree
      * @throws IOException probleme a la lecture / ouverture
      */
-    public Labyrinthe(String nom) throws IOException {
+    public Labyrinthe(String nom, Perso joueur) throws IOException {
         // ouvrir fichier
         FileReader fichier = new FileReader(nom);
         BufferedReader bfRead = new BufferedReader(fichier);
@@ -313,7 +313,14 @@ public class Labyrinthe {
                         // pas de mur
                         this.murs[colonne][numeroLigne] = false;
                         // ajoute PJ
-                        this.pj = new Perso(colonne, numeroLigne);
+                        if (pj != null) {
+                            this.pj = new Perso(colonne, numeroLigne);
+                        } else {
+                            pj = joueur;
+                            pj.x = colonne;
+                            pj.y = numeroLigne;
+                            pj.pv = 10;
+                        }
                         this.entree = new Entree(colonne, numeroLigne);
                         break;
                     case IDIOT:

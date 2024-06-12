@@ -176,7 +176,7 @@ public class LabyDessin implements DessinJeu {
         //JOUEUR
         try {
             chargerEntite(gc, pj_x, pj_y, PJ, direction, etat, "joueur");
-            dessinerHitbox(gc, pj_x, pj_y);
+            // dessinerHitbox(gc, pj_x, pj_y);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

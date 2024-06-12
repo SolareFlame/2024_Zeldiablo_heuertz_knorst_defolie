@@ -9,7 +9,7 @@ import java.io.IOException;
  * Classe qui permet de faire fonctionner le jeu dans le labyrinthe
  */
 public class LabyJeu implements Jeu {
-    private final Labyrinthe labyrinthe;
+    private Labyrinthe labyrinthe = null;
     public static boolean hautAppuye = false;
     public static boolean basAppuye = false;
     public static boolean gaucheAppuye = false;
@@ -26,7 +26,11 @@ public class LabyJeu implements Jeu {
      * @throws IOException Si une erreur de lecture du fichier se produit.
      */
     public LabyJeu(String nom) throws IOException {
-        this.labyrinthe = new Labyrinthe(nom);
+        if (Labyrinthe.pj == null) {
+            labyrinthe = new Labyrinthe(nom, new Perso(0, 0));
+        } else {
+            labyrinthe = new Labyrinthe(nom, Labyrinthe.pj);
+        }
     }
 
     /**
